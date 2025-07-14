@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eFootball Cup - Tournament</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        /* Header Banner */
+        .hero-banner {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 200"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23FF6B6B;stop-opacity:1" /><stop offset="50%" style="stop-color:%234ECDC4;stop-opacity:1" /><stop offset="100%" style="stop-color:%2345B7D1;stop-opacity:1" /></linearGradient></defs><rect width="1200" height="200" fill="url(%23grad)"/><circle cx="900" cy="100" r="80" fill="%23FFE66D" opacity="0.3"/><circle cx="1100" cy="50" r="60" fill="%23FF6B6B" opacity="0.2"/><polygon points="200,50 350,150 50,150" fill="%23A8E6CF" opacity="0.15"/></svg>');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 107, 107, 0.8), rgba(78, 205, 196, 0.8));
+            opacity: 0.7;
+        }
+
+        .hero-banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50" y="50" font-family="Arial Black" font-size="20" fill="white" text-anchor="middle" opacity="0.1">eFootball</text></svg>');
+            background-repeat: repeat;
+            background-size: 200px 100px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Tournament Header */
+        .tournament-header {
+            background: #16213e;
+            padding: 30px;
+            margin-top: -60px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .tournament-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .tournament-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .tournament-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .tournament-details h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tournament-meta {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            color: #8e9aaf;
+            font-size: 1rem;
+        }
+
+        .status-badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .tournament-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .registration-status {
+            color: #4ade80;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .register-btn {
+            background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(14, 165, 233, 0.3);
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            background: #16213e;
+            margin: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 16px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            color: #8e9aaf;
+            font-weight: 500;
+        }
+
+        .nav-tab:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            gap: 30px;
+            padding: 0 20px 40px;
+        }
+
+        .content-left {
+            flex: 2;
+        }
+
+        .content-right {
+            flex: 1;
+        }
+
+        .content-section {
+            background: #16213e;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        .section-content {
+            color: #b8c5d1;
+            line-height: 1.8;
+        }
+
+        .whatsapp-link {
+            color: #25d366;
+            text-decoration: none;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            background: rgba(37, 211, 102, 0.1);
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-link:hover {
+            background: rgba(37, 211, 102, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* Schedule Section */
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #2d3e5f;
+        }
+
+        .schedule-item:last-child {
+            border-bottom: none;
+        }
+
+        .schedule-label {
+            color: #8e9aaf;
+            font-weight: 500;
+        }
+
+        .schedule-value {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .schedule-value.open {
+            color: #4ade80;
+        }
+
+        .timezone {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tournament-info {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .tournament-actions {
+                align-items: stretch;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .main-content {
+                flex-direction: column;
+            }
+
+            .tournament-details h1 {
+                font-size: 2rem;
+            }
+
+            .hero-banner {
+                height: 150px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-section {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .tournament-header {
+            animation: fadeIn 0.8s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-banner"></div>
+
+    <div class="container">
+        <div class="tournament-header">
+            <div class="tournament-info">
+                <div class="tournament-left">
+                    <div class="tournament-icon">
+                        🏆
+                    </div>
+                    <div class="tournament-details">
+                        <h1>eFootball Cup</h1>
+                        <div class="tournament-meta">
+                            <span>Jul 31, 2025 - Aug 5, 2025</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tournament-actions">
+                    <div class="registration-status">Registration open</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <a href="stages.html" class="nav-tab">Stages</a>
+            <div class="nav-tab">Matches</div>
+            <a href="participants.html" class="nav-tab">Participants</a>
+            <a href="index.html" class="nav-tab active">Rules</a>
+        </div>
+
+        <div class="main-content">
+            <div class="content-left">
+                <div class="content-section">
+                    <h2 class="section-title">Tournament rules</h2>
+                    <div class="section-content">
+                        <p>Rules will be updated in our WhatsApp group</p>
+                        <br>
+                        <a href="https://chat.whatsapp.com/E0qWNq1OpAtHGNxJ4tWT7f" class="whatsapp-link" target="_blank">
+                            https://chat.whatsapp.com/E0qWNq1OpAtHGNxJ4tWT7f
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-right">
+                <div class="content-section">
+                    <h2 class="section-title">Schedule</h2>
+                    <div class="timezone">Kolkata (UTC+05:30)</div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-label">Tournament dates</div>
+                        <div class="schedule-value">Jul 31, 2025 - Aug 5, 2025</div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-label">Registrations</div>
+                        <div class="schedule-value open">Open</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.nav-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Here you would typically load different content
+                    // For now, we'll just show an alert
+                    const tabName = this.textContent;
+                    if (tabName !== 'Rules') {
+                        console.log(`Switching to ${tabName} tab`);
+                    }
+                });
+            });
+
+            // Register button functionality - REMOVED
+
+            // WhatsApp link click tracking
+            const whatsappLink = document.querySelector('.whatsapp-link');
+            whatsappLink.addEventListener('click', function(e) {
+                console.log('WhatsApp group link clicked');
+                // You can add analytics tracking here
+            });
+
+            // Add smooth scrolling for better UX
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Add animation on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all content sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+
+        // Add typing effect to tournament title
+        function typeWriter(element, text, speed = 50) {
+            let i = 0;
+            element.textContent = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            
+            type();
+        }
+
+        // Initialize typing effect
+        window.addEventListener('load', function() {
+            const titleElement = document.querySelector('.tournament-details h1');
+            const originalText = titleElement.textContent;
+            typeWriter(titleElement, originalText, 80);
+        });
+    </script>
+</body>
+</html>

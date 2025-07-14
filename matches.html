@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament Bracket</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+            overflow-x: auto;
+            line-height: 1.6; /* Added for consistency with index.html */
+        }
+
+        /* Hero Banner (Copied from index.html) */
+        .hero-banner {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 200"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23FF6B6B;stop-opacity:1" /><stop offset="50%" style="stop-color:%234ECDC4;stop-opacity:1" /><stop offset="100%" style="stop-color:%2345B7D1;stop-opacity:1" /></linearGradient></defs><rect width="1200" height="200" fill="url(%23grad)"/><circle cx="900" cy="100" r="80" fill="%23FFE66D" opacity="0.3"/><circle cx="1100" cy="50" r="60" fill="%23FF6B6B" opacity="0.2"/><polygon points="200,50 350,150 50,150" fill="%23A8E6CF" opacity="0.15"/></svg>');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 107, 107, 0.8), rgba(78, 205, 196, 0.8));
+            opacity: 0.7;
+        }
+
+        .hero-banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50" y="50" font-family="Arial Black" font-size="20" fill="white" text-anchor="middle" opacity="0.1">eFootball</text></svg>');
+            background-repeat: repeat;
+            background-size: 200px 100px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Tournament Header (Copied from index.html) */
+        .tournament-header {
+            background: #16213e;
+            padding: 30px;
+            margin-top: -60px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .tournament-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .tournament-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .tournament-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .tournament-details h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tournament-meta {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            color: #8e9aaf;
+            font-size: 1rem;
+        }
+
+        .tournament-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .registration-status {
+            color: #4ade80;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #16213e;
+            margin: 20px; /* Adjusted margin for consistency */
+            border-radius: 12px; /* Added border-radius for consistency */
+            overflow: hidden; /* Added overflow for consistency */
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); /* Added box-shadow for consistency */
+        }
+
+        .nav-tab {
+            flex: 1; /* Added flex for equal width tabs */
+            padding: 16px 20px; /* Adjusted padding for consistency */
+            text-align: center; /* Centered text for consistency */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent; /* Adjusted border for consistency */
+            color: #8e9aaf;
+            font-weight: 500; /* Adjusted font-weight for consistency */
+            text-decoration: none; /* Ensure links don't have underlines */
+        }
+
+        .nav-tab:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-tab.active {
+            color: #3b82f6; /* Adjusted color for consistency */
+            border-bottom-color: #3b82f6; /* Adjusted color for consistency */
+            background: rgba(59, 130, 246, 0.1); /* Adjusted background for consistency */
+        }
+
+        .bracket-container {
+            padding: 30px;
+            overflow-x: auto;
+            min-height: calc(100vh - 60px);
+        }
+
+        .bracket {
+            display: flex;
+            gap: 80px;
+            min-width: 1200px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .round {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .round-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #8e9aaf;
+            margin-bottom: 20px;
+        }
+
+        .round-matches {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .match {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background: #2d3e5f;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .match:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .participant {
+            padding: 15px 20px;
+            background: #2d3e5f;
+            border-bottom: 1px solid #3a4d6b;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            min-width: 200px;
+            color: #ffffff;
+        }
+
+        .participant:last-child {
+            border-bottom: none;
+        }
+
+        .participant:hover {
+            background: #3a4d6b;
+        }
+
+        .participant.winner {
+            background: #1e3a5f;
+            color: #4a9eff;
+            font-weight: 600;
+        }
+
+        .participant.tbd {
+            color: #6c7b8a;
+            font-style: italic;
+        }
+
+        /* Connecting lines */
+        .match::after {
+            content: '';
+            position: absolute;
+            right: -40px;
+            top: 50%;
+            width: 40px;
+            height: 2px;
+            background: #4a5568;
+            transform: translateY(-1px);
+        }
+
+        .round:last-child .match::after {
+            display: none;
+        }
+
+        /* Vertical connecting lines for bracket structure */
+        .round-matches::before {
+            content: '';
+            position: absolute;
+            left: calc(100% + 20px);
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #4a5568;
+        }
+
+        .round:last-child .round-matches::before {
+            display: none;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .bracket {
+                gap: 40px;
+                min-width: 800px;
+            }
+            
+            .participant {
+                min-width: 150px;
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+            
+            .round-title {
+                font-size: 16px;
+            }
+
+            /* Responsive adjustments for header */
+            .tournament-info {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .tournament-actions {
+                align-items: stretch;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .tournament-details h1 {
+                font-size: 2rem;
+            }
+
+            .hero-banner {
+                height: 150px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tournament-header {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #16213e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5a6578;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Banner -->
+    <div class="hero-banner"></div>
+
+    <div class="container">
+        <!-- Tournament Header -->
+        <div class="tournament-header">
+            <div class="tournament-info">
+                <div class="tournament-left">
+                    <div class="tournament-icon">
+                        🏆
+                    </div>
+                    <div class="tournament-details">
+                        <h1>eFootball Cup</h1>
+                        <div class="tournament-meta">
+                            <span>Jul 31, 2025 - Aug 5, 2025</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tournament-actions">
+                    <div class="registration-status">Registration open</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <a href="index.html" class="nav-tab">Overview</a>
+            <a href="stages.html" class="nav-tab active">Stages</a>
+            <div class="nav-tab">Matches</div>
+            <a href="participants.html" class="nav-tab">Participants</a>
+            <a href="index.html" class="nav-tab">Rules</a>
+            <div class="nav-tab">Streams & VODs</div>
+        </div>
+
+        <div class="bracket-container">
+            <div class="bracket" id="bracket">
+                <!-- Round 1 -->
+                <div class="round">
+                    <div class="round-title">Round 1</div>
+                    <div class="round-matches">
+                        <div class="match">
+                            <div class="participant tbd">TBD</div>
+                            <div class="participant tbd">TBD</div>
+                        </div>
+                        <div class="match">
+                            <div class="participant tbd">TBD</div>
+                            <div class="participant tbd">TBD</div>
+                        </div>
+                        <div class="match">
+                            <div class="participant tbd">TBD</div>
+                            <div class="participant tbd">TBD</div>
+                        </div>
+                        <div class="match">
+                            <div class="participant tbd">TBD</div>
+                            <div class="participant tbd">TBD</div>
+                        </div>
+                        <div class="match">
+                            <div class="participant tbd">TBD</div>
+                            <div class="participant tbd">TBD</div>
+                        </div>
+                        <div class="match">
+                            <div class="participant tbd">TBD</div>
+                            <div class="participant tbd">TBD</div>
+                        </div>
+                        <div class="match">
+                            <div class="participant tbd">TBD</div>
+                            <div class="participant tbd">TBD</div>
+                        </div>
+                        <div class="match">
+                            <div class="participant tbd">TBD</div>
+                            <div class="participant tbd">TBD</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Round 2 -->
+                <div class="round">
+                    <div class="round-title">Round 2</div>
+                    <div class="round-matches">
+                        <div class="match">
+                            <div class="participant tbd">TBD</div>
+                            <div class="participant tbd">TBD</div>
+                        </div>
+                        <div class="match">
+                            <div class="participant tbd">TBD</div>
+                            <div class="participant tbd">TBD</div>
+                        </div>
+                        <div class="match">
+                            <div class="participant tbd">TBD</div>
+                            <div class="participant tbd">TBD</div>
+                        </div>
+                        <div class="match">
+                            <div class="participant tbd">TBD</div>
+                            <div class="participant tbd">TBD</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Round 3 -->
+                <div class="round">
+                    <div class="round-title">Round 3</div>
+                    <div class="round-matches">
+                        <div class="match">
+                            <div class="participant tbd">TBD</div>
+                            <div class="participant tbd">TBD</div>
+                        </div>
+                        <div class="match">
+                            <div class="participant tbd">TBD</div>
+                            <div class="participant tbd">TBD</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Round 4 (Final) -->
+                <div class="round">
+                    <div class="round-title">Round 4</div>
+                    <div class="round-matches">
+                        <div class="match">
+                            <div class="participant tbd">TBD</div>
+                            <div class="participant tbd">TBD</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tournament bracket functionality
+        class TournamentBracket {
+            constructor() {
+                this.participants = [];
+                this.matches = [];
+                this.currentRound = 1;
+                this.init();
+            }
+
+            init() {
+                this.setupNavigation();
+                this.setupBracket();
+                this.addEventListeners();
+            }
+
+            setupNavigation() {
+                const tabs = document.querySelectorAll('.nav-tab');
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        tabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                    });
+                });
+            }
+
+            setupBracket() {
+                // Sample participants for demonstration
+                this.participants = [
+                    'Team Alpha', 'Team Beta', 'Team Gamma', 'Team Delta',
+                    'Team Echo', 'Team Foxtrot', 'Team Golf', 'Team Hotel',
+                    'Team India', 'Team Juliet', 'Team Kilo', 'Team Lima',
+                    'Team Mike', 'Team November', 'Team Oscar', 'Team Papa'
+                ];
+
+                // Populate first round with participants
+                this.populateFirstRound();
+            }
+
+            populateFirstRound() {
+                const firstRound = document.querySelector('.round:first-child .round-matches');
+                const matches = firstRound.querySelectorAll('.match');
+                
+                matches.forEach((match, index) => {
+                    const participants = match.querySelectorAll('.participant');
+                    if (index * 2 < this.participants.length) {
+                        participants[0].textContent = this.participants[index * 2] || 'TBD';
+                        participants[0].classList.remove('tbd');
+                    }
+                    if (index * 2 + 1 < this.participants.length) {
+                        participants[1].textContent = this.participants[index * 2 + 1] || 'TBD';
+                        participants[1].classList.remove('tbd');
+                    }
+                });
+            }
+
+            addEventListeners() {
+                const participants = document.querySelectorAll('.participant');
+                participants.forEach(participant => {
+                    participant.addEventListener('click', (e) => {
+                        this.handleParticipantClick(e.target);
+                    });
+                });
+            }
+
+            handleParticipantClick(participant) {
+                if (participant.classList.contains('tbd')) return;
+
+                const match = participant.closest('.match');
+                const participants = match.querySelectorAll('.participant');
+                
+                // Remove winner class from all participants in this match
+                participants.forEach(p => p.classList.remove('winner'));
+                
+                // Add winner class to clicked participant
+                participant.classList.add('winner');
+                
+                // Advance winner to next round
+                this.advanceWinner(participant, match);
+            }
+
+            advanceWinner(winner, match) {
+                const round = match.closest('.round');
+                const nextRound = round.nextElementSibling;
+                
+                if (!nextRound) return; // Already in final round
+                
+                const roundMatches = round.querySelectorAll('.match');
+                const matchIndex = Array.from(roundMatches).indexOf(match);
+                const nextRoundMatches = nextRound.querySelectorAll('.match');
+                const nextMatchIndex = Math.floor(matchIndex / 2);
+                const nextMatch = nextRoundMatches[nextMatchIndex];
+                
+                if (nextMatch) {
+                    const nextParticipants = nextMatch.querySelectorAll('.participant');
+                    const slotIndex = matchIndex % 2;
+                    
+                    if (nextParticipants[slotIndex]) {
+                        nextParticipants[slotIndex].textContent = winner.textContent;
+                        nextParticipants[slotIndex].classList.remove('tbd');
+                    }
+                }
+            }
+
+            // Method to reset bracket
+            resetBracket() {
+                const allParticipants = document.querySelectorAll('.participant');
+                allParticipants.forEach(participant => {
+                    participant.classList.remove('winner');
+                    if (!participant.closest('.round:first-child')) {
+                        participant.textContent = 'TBD';
+                        participant.classList.add('tbd');
+                    }
+                });
+            }
+
+            // Method to simulate tournament progression
+            simulateTournament() {
+                const rounds = document.querySelectorAll('.round');
+                rounds.forEach((round, roundIndex) => {
+                    setTimeout(() => {
+                        const matches = round.querySelectorAll('.match');
+                        matches.forEach(match => {
+                            const participants = match.querySelectorAll('.participant:not(.tbd)');
+                            if (participants.length === 2) {
+                                const randomWinner = participants[Math.floor(Math.random() * participants.length)];
+                                this.handleParticipantClick(randomWinner);
+                            }
+                        });
+                    }, roundIndex * 1000);
+                });
+            }
+        }
+
+        // Initialize tournament bracket
+        const tournament = new TournamentBracket();
+
+        // Add keyboard shortcuts for demo
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'r' && e.ctrlKey) {
+                e.preventDefault();
+                tournament.resetBracket();
+            }
+            if (e.key === 's' && e.ctrlKey) {
+                e.preventDefault();
+                tournament.simulateTournament();
+            }
+        });
+
+        // Add a simple demo button for mobile users
+        const demoButton = document.createElement('button');
+        demoButton.textContent = 'Simulate Tournament';
+        demoButton.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4a9eff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        `;
+        
+        demoButton.addEventListener('click', () => {
+            tournament.simulateTournament();
+        });
+        
+        demoButton.addEventListener('mouseenter', () => {
+            demoButton.style.background = '#357abd';
+            demoButton.style.transform = 'translateY(-2px)';
+        });
+        
+        demoButton.addEventListener('mouseleave', () => {
+            demoButton.style.background = '#4a9eff';
+            demoButton.style.transform = 'translateY(0)';
+        });
+        
+        document.body.appendChild(demoButton);
+    </script>
+</body>
+</html>
