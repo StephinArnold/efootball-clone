@@ -184,7 +184,8 @@
 
         .pools-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Two columns for pools */
+            /* Two columns for pools on larger screens, minmax ensures responsiveness */
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); 
             gap: 30px; /* Increased gap between pools */
             margin-bottom: 40px;
         }
@@ -210,6 +211,12 @@
             -webkit-text-fill-color: transparent;
         }
 
+        /* Wrapper for table content to enable horizontal scrolling */
+        .pool-table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        }
+
         .pool-table-header,
         .pool-participant-row {
             display: grid;
@@ -220,6 +227,7 @@
             align-items: center;
             font-size: 0.9rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            min-width: 600px; /* Ensure a minimum width for the table content to enable scroll */
         }
 
         .pool-table-header {
@@ -279,54 +287,128 @@
         }
 
         /* Responsive Design */
+        /* For screens up to 960px, pools will stack in a single column */
         @media (max-width: 960px) {
             .pools-grid {
                 grid-template-columns: 1fr; /* Single column on smaller screens */
             }
         }
 
+        /* For screens up to 768px (common tablet/large phone breakpoint) */
         @media (max-width: 768px) {
             .tournament-info {
-                flex-direction: column;
-                align-items: stretch;
+                flex-direction: column; /* Stack tournament info vertically */
+                align-items: stretch; /* Stretch items to fill width */
             }
 
             .tournament-actions {
-                align-items: stretch;
+                align-items: stretch; /* Stretch actions vertically */
             }
 
             .nav-tabs {
-                flex-direction: column;
+                flex-direction: row; /* Keep tabs horizontal but allow scrolling */
+                white-space: nowrap;
+                overflow-x: auto;
+            }
+            .nav-tab {
+                flex-shrink: 0; /* Prevent tabs from shrinking */
             }
 
             .tournament-details h1 {
-                font-size: 2rem;
+                font-size: 2rem; /* Slightly smaller heading for better fit */
             }
 
             .hero-banner {
-                height: 150px;
+                height: 150px; /* Shorter banner on smaller screens */
             }
 
             /* Adjust table layout for very small screens */
             .pool-table-header,
             .pool-participant-row {
-                grid-template-columns: 1.5fr repeat(4, 0.5fr) 1.5fr; /* Hide some columns on small screens */
-                font-size: 0.8rem;
+                /* Reduced columns to show only essential data: Player Name, MP, W, Pts, Last 5 */
+                grid-template-columns: 1.5fr repeat(2, 0.5fr) 1.5fr; /* Player Name, MP, W, Pts, Last 5 */
+                font-size: 0.8rem; /* Smaller font size for table data */
+                min-width: 450px; /* Adjusted min-width for fewer columns */
             }
 
-            .pool-table-header div:nth-child(3), /* Hide D */
-            .pool-table-header div:nth-child(4), /* Hide L */
-            .pool-table-header div:nth-child(5), /* Hide GF */
-            .pool-table-header div:nth-child(6), /* Hide GA */
-            .pool-table-header div:nth-child(7), /* Hide GD */
-            .pool-participant-row div:nth-child(3),
+            /* Hide specific columns on small screens to prevent horizontal scrolling */
+            .pool-table-header div:nth-child(4), /* Hide D */
+            .pool-table-header div:nth-child(5), /* Hide L */
+            .pool-table-header div:nth-child(6), /* Hide GF */
+            .pool-table-header div:nth-child(7), /* Hide GA */
+            .pool-table-header div:nth-child(8), /* Hide GD */
             .pool-participant-row div:nth-child(4),
             .pool-participant-row div:nth-child(5),
             .pool-participant-row div:nth-child(6),
-            .pool-participant-row div:nth-child(7) {
+            .pool-participant-row div:nth-child(7),
+            .pool-participant-row div:nth-child(8) {
                 display: none;
             }
         }
+
+        /* Further adjustments for very small mobile screens (e.g., less than 480px) */
+        @media (max-width: 480px) {
+            .tournament-header,
+            .nav-tabs,
+            .matches-content {
+                margin-left: 10px;
+                margin-right: 10px;
+                padding: 15px; /* Reduce padding for tighter layout */
+            }
+
+            .tournament-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 30px;
+            }
+
+            .tournament-details h1 {
+                font-size: 1.8rem;
+            }
+
+            .tournament-meta {
+                font-size: 0.9rem;
+            }
+
+            .nav-tab {
+                padding: 12px 10px; /* Smaller padding for nav tabs */
+                font-size: 0.9rem;
+            }
+
+            .matches-title {
+                font-size: 1.5rem;
+            }
+
+            .matches-description {
+                font-size: 1rem;
+            }
+
+            .pool-container {
+                padding: 15px; /* Smaller padding for pool containers */
+            }
+
+            .pool-title {
+                font-size: 1.3rem;
+            }
+
+            .pool-table-header,
+            .pool-participant-row {
+                /* Even further simplified for smallest screens: Player Name, Pts, Last 5 */
+                grid-template-columns: 2fr 0.7fr 1.5fr; /* Player Name, Pts, Last 5 */
+                font-size: 0.75rem;
+                gap: 5px; /* Reduced gap */
+                min-width: 350px; /* Adjusted min-width for even fewer columns */
+            }
+
+            /* Hide MP, W on very small screens */
+            .pool-table-header div:nth-child(2), /* Hide MP */
+            .pool-table-header div:nth-child(3), /* Hide W */
+            .pool-participant-row div:nth-child(2),
+            .pool-participant-row div:nth-child(3) {
+                display: none;
+            }
+        }
+
 
         /* Animations */
         @keyframes fadeIn {
@@ -367,7 +449,7 @@
         <div class="nav-tabs">
             <!-- <a href="index.html" class="nav-tab">Overview</a> -->
             <a href="stages.html" class="nav-tab">Stages</a>
-            <a href="matches.html" class="nav-tab active">Matches</a> <!-- Matches tab is active -->
+            <a href="matches.html" class="nav-tab active" aria-current="page">Matches</a> <!-- Matches tab is active -->
             <a href="participants.html" class="nav-tab">Participants</a>
             <a href="index.html" class="nav-tab">Rules</a>
             <a href="auction.html" class="nav-tab">Auction</a>
@@ -459,20 +541,22 @@
                 poolContainer.className = 'pool-container';
                 poolContainer.innerHTML = `
                     <h3 class="pool-title">${pool.name}</h3>
-                    <div class="pool-table-header">
-                        <div>Club</div>
-                        <div>MP</div>
-                        <div>W</div>
-                        <div>D</div>
-                        <div>L</div>
-                        <div>GF</div>
-                        <div>GA</div>
-                        <div>GD</div>
-                        <div>Pts</div>
-                        <div>Last 5</div>
-                    </div>
-                    <div class="pool-participants-list">
-                        <!-- Participant rows will be inserted here -->
+                    <div class="pool-table-wrapper"> <!-- New wrapper for horizontal scrolling -->
+                        <div class="pool-table-header">
+                            <div>Club</div>
+                            <div>MP</div>
+                            <div>W</div>
+                            <div>D</div>
+                            <div>L</div>
+                            <div>GF</div>
+                            <div>GA</div>
+                            <div>GD</div>
+                            <div>Pts</div>
+                            <div>Last 5</div>
+                        </div>
+                        <div class="pool-participants-list">
+                            <!-- Participant rows will be inserted here -->
+                        </div>
                     </div>
                 `;
 

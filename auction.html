@@ -48,7 +48,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50" y="50" font-family="Arial Black" font-size="20" fill="white" text-anchor="middle" opacity="0.1">eFootball</text></svg>');
+            background: url('data:image/svg+xml,<svg xmlns="images/header.webp" viewBox="0 0 100 100"><text x="50" y="50" font-family="Arial Black" font-size="20" fill="white" text-anchor="middle" opacity="0.1">eFootball</text></svg>');
             background-repeat: repeat;
             background-size: 200px 100px;
         }
@@ -262,8 +262,8 @@
             transform: translateY(-1px);
         }
 
-        /* Inline Team Details Container */
-        .team-details-container {
+       /* Inline Team Details Container */
+       .team-details-container {
             margin-top: 15px;
             padding-top: 15px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -285,7 +285,31 @@
             grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Smaller players, more in a row */
             gap: 10px;
             justify-content: center;
+            /* Allow horizontal scrolling for player cards if they overflow */
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
+            padding-bottom: 10px; /* Add padding for scrollbar visibility */
         }
+
+        /* Style the scrollbar for webkit browsers */
+        .team-players-grid::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .team-players-grid::-webkit-scrollbar-track {
+            background: #1a2a40;
+            border-radius: 10px;
+        }
+
+        .team-players-grid::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 10px;
+        }
+
+        .team-players-grid::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+
 
         .team-player-card {
             background: #1a2a40; /* Slightly darker background for player cards */
@@ -296,6 +320,8 @@
             align-items: center;
             gap: 5px;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+            /* Ensure cards don't shrink too much */
+            min-width: 80px;
         }
 
         .team-player-card img {
@@ -326,7 +352,23 @@
                 flex-direction: column;
                 align-items: stretch;
             }
-
+            /* Ensure the left part of the header stacks and centers its content */
+            .tournament-left {
+                flex-direction: column; /* Stack icon and details */
+                align-items: center; /* Center them when stacked */
+                text-align: center; /* Center text within details */
+            }
+            .tournament-details {
+                text-align: center; /* Ensure text is centered */
+                margin-top: 10px; /* Add some space between icon and text */
+            }
+            .tournament-details h1 {
+                font-size: 2rem;
+                word-break: break-word; /* Ensure long titles wrap */
+            }
+            .tournament-meta {
+                justify-content: center; /* Center meta info */
+            }
             .tournament-actions {
                 align-items: stretch;
             }
@@ -335,8 +377,14 @@
                 flex-direction: column;
             }
 
-            .tournament-details h1 {
-                font-size: 2rem;
+            .nav-tab {
+                border-bottom: none; /* Remove bottom border for stacked tabs */
+                border-left: 3px solid transparent; /* Use left border for active state */
+            }
+
+            .nav-tab.active {
+                border-bottom-color: transparent;
+                border-left-color: #3b82f6;
             }
 
             .hero-banner {
@@ -344,7 +392,6 @@
             }
 
             .auction-participant-box {
-                /* Already column flex for small screens due to default .auction-participant-box */
                 align-items: flex-start;
             }
 
@@ -357,6 +404,24 @@
             .view-more-button {
                 margin-left: 0; /* Remove left margin when stacked */
                 width: 100%; /* Full width button */
+            }
+
+            /* Adjust team players grid for very small screens */
+            .team-players-grid {
+                grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); /* Even smaller player cards if needed */
+            }
+
+            .team-player-card {
+                min-width: 60px; /* Ensure a minimum width */
+            }
+
+            .team-player-card img {
+                width: 30px;
+                height: 30px;
+            }
+
+            .team-player-card span {
+                font-size: 0.7rem;
             }
         }
 
@@ -512,7 +577,8 @@
                 teamPlayersGrid.innerHTML = '<p style="color: #8e9aaf; text-align: center; width: 100%;">No team players available for this participant.</p>';
             }
 
-            // Add event listener to the "View Team" button
+            // Add event listener to the "View Team" button using event delegation principle
+            // (listener is added to the grid parent, but effectively handles individual button clicks)
             const viewMoreButton = box.querySelector('.view-more-button');
             viewMoreButton.addEventListener('click', (event) => {
                 event.stopPropagation(); // Prevent any parent click listeners
@@ -546,13 +612,22 @@
         document.addEventListener('DOMContentLoaded', function() {
             const tabs = document.querySelectorAll('.nav-tab');
             
+            // Set active tab based on current URL
+            const currentPath = window.location.pathname.split('/').pop();
+            tabs.forEach(tab => {
+                if (tab.getAttribute('href') === currentPath) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
             tabs.forEach(tab => {
                 tab.addEventListener('click', function() {
+                    // This part is for visual feedback, actual page navigation happens via href
                     tabs.forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
-                    
-                    const tabName = this.textContent;
-                    console.log(`Switching to ${tabName} tab`);
+                    console.log(`Switching to ${this.textContent} tab`);
                 });
             });
 
