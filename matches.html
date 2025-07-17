@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tournament Bracket</title>
+    <title>eFootball Cup - Matches</title>
     <style>
+        /* Reusing all existing styles from auction.html for consistency */
         * {
             margin: 0;
             padding: 0;
@@ -15,11 +16,10 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #1a1a2e;
             color: #ffffff;
-            overflow-x: auto;
-            line-height: 1.6; /* Added for consistency with index.html */
+            line-height: 1.6;
         }
 
-        /* Hero Banner (Copied from index.html) */
+        /* Hero Banner */
         .hero-banner {
             height: 200px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -61,7 +61,7 @@
             z-index: 1;
         }
 
-        /* Tournament Header (Copied from index.html) */
+        /* Tournament Header */
         .tournament-header {
             background: #16213e;
             padding: 30px;
@@ -125,31 +125,25 @@
             align-items: flex-end;
         }
 
-        .registration-status {
-            color: #4ade80;
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
+        /* Navigation */
         .nav-tabs {
             display: flex;
             background: #16213e;
-            margin: 20px; /* Adjusted margin for consistency */
-            border-radius: 12px; /* Added border-radius for consistency */
-            overflow: hidden; /* Added overflow for consistency */
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); /* Added box-shadow for consistency */
+            margin: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
         }
 
         .nav-tab {
-            flex: 1; /* Added flex for equal width tabs */
-            padding: 16px 20px; /* Adjusted padding for consistency */
-            text-align: center; /* Centered text for consistency */
+            flex: 1;
+            padding: 16px 20px;
+            text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            border-bottom: 3px solid transparent; /* Adjusted border for consistency */
+            border-bottom: 3px solid transparent;
             color: #8e9aaf;
-            font-weight: 500; /* Adjusted font-weight for consistency */
-            text-decoration: none; /* Ensure links don't have underlines */
+            font-weight: 500;
         }
 
         .nav-tab:hover {
@@ -158,139 +152,140 @@
         }
 
         .nav-tab.active {
-            color: #3b82f6; /* Adjusted color for consistency */
-            border-bottom-color: #3b82f6; /* Adjusted color for consistency */
-            background: rgba(59, 130, 246, 0.1); /* Adjusted background for consistency */
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
         }
 
-        .bracket-container {
+        /* Matches Content Specific Styles */
+        .matches-content {
+            padding: 20px;
+        }
+
+        .matches-header {
+            background: #16213e;
             padding: 30px;
-            overflow-x: auto;
-            min-height: calc(100vh - 60px);
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
         }
 
-        .bracket {
-            display: flex;
-            gap: 80px;
-            min-width: 1200px;
-            justify-content: center;
-            align-items: flex-start;
+        .matches-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 10px;
         }
 
-        .round {
-            display: flex;
-            flex-direction: column;
+        .matches-description {
+            color: #8e9aaf;
+            font-size: 1.1rem;
+        }
+
+        .pools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Two columns for pools */
+            gap: 30px; /* Increased gap between pools */
+            margin-bottom: 40px;
+        }
+
+        .pool-container {
+            background: #2d3e5f;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .pool-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 15px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .pool-table-header,
+        .pool-participant-row {
+            display: grid;
+            /* Define columns for: Player Name, MP, W, D, L, GF, GA, GD, Pts, Last 5 */
+            grid-template-columns: 1.5fr repeat(8, 0.5fr) 1.5fr; /* Adjusted column widths */
+            gap: 10px;
+            padding: 10px 0;
             align-items: center;
-            gap: 30px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .round-title {
-            font-size: 18px;
+        .pool-table-header {
             font-weight: 600;
             color: #8e9aaf;
-            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            margin-bottom: 5px;
+            padding-bottom: 12px;
         }
 
-        .round-matches {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .match {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            background: #2d3e5f;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .match:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        .participant {
-            padding: 15px 20px;
-            background: #2d3e5f;
-            border-bottom: 1px solid #3a4d6b;
-            cursor: pointer;
-            transition: background 0.2s ease;
-            min-width: 200px;
-            color: #ffffff;
-        }
-
-        .participant:last-child {
+        .pool-participant-row:last-child {
             border-bottom: none;
         }
 
-        .participant:hover {
-            background: #3a4d6b;
+        .pool-participant-row > div {
+            text-align: center; /* Center align all data cells */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
-        .participant.winner {
-            background: #1e3a5f;
-            color: #4a9eff;
-            font-weight: 600;
+        .pool-participant-row .player-name {
+            text-align: left; /* Align player name to the left */
+            font-weight: 500;
+            color: #ffffff;
         }
 
-        .participant.tbd {
-            color: #6c7b8a;
-            font-style: italic;
+        .last-5-results {
+            display: flex;
+            justify-content: center;
+            gap: 3px;
         }
 
-        /* Connecting lines */
-        .match::after {
-            content: '';
-            position: absolute;
-            right: -40px;
-            top: 50%;
-            width: 40px;
-            height: 2px;
-            background: #4a5568;
-            transform: translateY(-1px);
+        .last-5-result-item {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: white;
         }
 
-        .round:last-child .match::after {
-            display: none;
+        .last-5-result-item.win {
+            background-color: #4ade80; /* Green */
+        }
+        .last-5-result-item.loss {
+            background-color: #ef4444; /* Red */
+        }
+        .last-5-result-item.draw {
+            background-color: #facc15; /* Yellow */
+        }
+        .last-5-result-item.upcoming {
+            background-color: #6b7280; /* Gray for upcoming/no result */
         }
 
-        /* Vertical connecting lines for bracket structure */
-        .round-matches::before {
-            content: '';
-            position: absolute;
-            left: calc(100% + 20px);
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: #4a5568;
+        /* Responsive Design */
+        @media (max-width: 960px) {
+            .pools-grid {
+                grid-template-columns: 1fr; /* Single column on smaller screens */
+            }
         }
 
-        .round:last-child .round-matches::before {
-            display: none;
-        }
-
-        /* Responsive design */
         @media (max-width: 768px) {
-            .bracket {
-                gap: 40px;
-                min-width: 800px;
-            }
-            
-            .participant {
-                min-width: 150px;
-                padding: 12px 16px;
-                font-size: 14px;
-            }
-            
-            .round-title {
-                font-size: 16px;
-            }
-
-            /* Responsive adjustments for header */
             .tournament-info {
                 flex-direction: column;
                 align-items: stretch;
@@ -311,6 +306,26 @@
             .hero-banner {
                 height: 150px;
             }
+
+            /* Adjust table layout for very small screens */
+            .pool-table-header,
+            .pool-participant-row {
+                grid-template-columns: 1.5fr repeat(4, 0.5fr) 1.5fr; /* Hide some columns on small screens */
+                font-size: 0.8rem;
+            }
+
+            .pool-table-header div:nth-child(3), /* Hide D */
+            .pool-table-header div:nth-child(4), /* Hide L */
+            .pool-table-header div:nth-child(5), /* Hide GF */
+            .pool-table-header div:nth-child(6), /* Hide GA */
+            .pool-table-header div:nth-child(7), /* Hide GD */
+            .pool-participant-row div:nth-child(3),
+            .pool-participant-row div:nth-child(4),
+            .pool-participant-row div:nth-child(5),
+            .pool-participant-row div:nth-child(6),
+            .pool-participant-row div:nth-child(7) {
+                display: none;
+            }
         }
 
         /* Animations */
@@ -324,36 +339,12 @@
                 transform: translateY(0);
             }
         }
-
-        .tournament-header {
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #16213e;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #4a5568;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #5a6578;
-        }
     </style>
 </head>
 <body>
-    <!-- Hero Banner -->
     <div class="hero-banner"></div>
 
     <div class="container">
-        <!-- Tournament Header -->
         <div class="tournament-header">
             <div class="tournament-info">
                 <div class="tournament-left">
@@ -368,296 +359,172 @@
                     </div>
                 </div>
                 <div class="tournament-actions">
-                    <div class="registration-status">Registration open</div>
+                    <!-- This section can be used for registration status or other actions -->
                 </div>
             </div>
         </div>
 
         <div class="nav-tabs">
-            <a href="index.html" class="nav-tab">Overview</a>
-            <a href="stages.html" class="nav-tab active">Stages</a>
-            <div class="nav-tab">Matches</div>
+            <!-- <a href="index.html" class="nav-tab">Overview</a> -->
+            <a href="stages.html" class="nav-tab">Stages</a>
+            <a href="matches.html" class="nav-tab active">Matches</a> <!-- Matches tab is active -->
             <a href="participants.html" class="nav-tab">Participants</a>
             <a href="index.html" class="nav-tab">Rules</a>
-            <div class="nav-tab">Streams & VODs</div>
+            <a href="auction.html" class="nav-tab">Auction</a>
         </div>
 
-        <div class="bracket-container">
-            <div class="bracket" id="bracket">
-                <!-- Round 1 -->
-                <div class="round">
-                    <div class="round-title">Round 1</div>
-                    <div class="round-matches">
-                        <div class="match">
-                            <div class="participant tbd">TBD</div>
-                            <div class="participant tbd">TBD</div>
-                        </div>
-                        <div class="match">
-                            <div class="participant tbd">TBD</div>
-                            <div class="participant tbd">TBD</div>
-                        </div>
-                        <div class="match">
-                            <div class="participant tbd">TBD</div>
-                            <div class="participant tbd">TBD</div>
-                        </div>
-                        <div class="match">
-                            <div class="participant tbd">TBD</div>
-                            <div class="participant tbd">TBD</div>
-                        </div>
-                        <div class="match">
-                            <div class="participant tbd">TBD</div>
-                            <div class="participant tbd">TBD</div>
-                        </div>
-                        <div class="match">
-                            <div class="participant tbd">TBD</div>
-                            <div class="participant tbd">TBD</div>
-                        </div>
-                        <div class="match">
-                            <div class="participant tbd">TBD</div>
-                            <div class="participant tbd">TBD</div>
-                        </div>
-                        <div class="match">
-                            <div class="participant tbd">TBD</div>
-                            <div class="participant tbd">TBD</div>
-                        </div>
-                    </div>
-                </div>
+        <div class="matches-content">
+            <div class="matches-header">
+                <h2 class="matches-title">Tournament Pools & Standings</h2>
+                <p class="matches-description">Overview of participant pools and their current standings.</p>
+            </div>
 
-                <!-- Round 2 -->
-                <div class="round">
-                    <div class="round-title">Round 2</div>
-                    <div class="round-matches">
-                        <div class="match">
-                            <div class="participant tbd">TBD</div>
-                            <div class="participant tbd">TBD</div>
-                        </div>
-                        <div class="match">
-                            <div class="participant tbd">TBD</div>
-                            <div class="participant tbd">TBD</div>
-                        </div>
-                        <div class="match">
-                            <div class="participant tbd">TBD</div>
-                            <div class="participant tbd">TBD</div>
-                        </div>
-                        <div class="match">
-                            <div class="participant tbd">TBD</div>
-                            <div class="participant tbd">TBD</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Round 3 -->
-                <div class="round">
-                    <div class="round-title">Round 3</div>
-                    <div class="round-matches">
-                        <div class="match">
-                            <div class="participant tbd">TBD</div>
-                            <div class="participant tbd">TBD</div>
-                        </div>
-                        <div class="match">
-                            <div class="participant tbd">TBD</div>
-                            <div class="participant tbd">TBD</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Round 4 (Final) -->
-                <div class="round">
-                    <div class="round-title">Round 4</div>
-                    <div class="round-matches">
-                        <div class="match">
-                            <div class="participant tbd">TBD</div>
-                            <div class="participant tbd">TBD</div>
-                        </div>
-                    </div>
-                </div>
+            <div class="pools-grid" id="poolsGrid">
+                <!-- Pools will be rendered here by JavaScript -->
             </div>
         </div>
     </div>
 
     <script>
-        // Tournament bracket functionality
-        class TournamentBracket {
-            constructor() {
-                this.participants = [];
-                this.matches = [];
-                this.currentRound = 1;
-                this.init();
+        // Helper function to generate random stats for participants
+        function generateRandomStats() {
+            const mp = Math.floor(Math.random() * 6) + 1; // Matches Played (1-6)
+            const w = Math.floor(Math.random() * mp);
+            const d = Math.floor(Math.random() * (mp - w));
+            const l = mp - w - d;
+            const gf = Math.floor(Math.random() * 20) + 5;
+            const ga = Math.floor(Math.random() * 20) + 5;
+            const gd = gf - ga;
+            const pts = (w * 3) + d;
+
+            const last5 = [];
+            const results = ['W', 'L', 'D'];
+            for (let i = 0; i < 5; i++) {
+                last5.push(results[Math.floor(Math.random() * results.length)]);
             }
 
-            init() {
-                this.setupNavigation();
-                this.setupBracket();
-                this.addEventListeners();
-            }
+            return { mp, w, d, l, gf, ga, gd, pts, last5 };
+        }
 
-            setupNavigation() {
-                const tabs = document.querySelectorAll('.nav-tab');
-                tabs.forEach(tab => {
-                    tab.addEventListener('click', () => {
-                        tabs.forEach(t => t.classList.remove('active'));
-                        tab.classList.add('active');
-                    });
-                });
-            }
+        // Generate 48 unique participant names for 8 pools * 6 participants/pool
+        const allTournamentParticipants = [];
+        const participantNames = [
+            'Ako', 'Andrewar85', 'anzil', 'Ashh', 'asish__009', 'BEASTg9', 'Chris', 'CyberknightZH',
+            'Diamo12', 'FK04', 'Gamingsolutions', 'Hamada', 'ide5219', 'Jay', 'Kaiser', 'Lord Maguire',
+            'Methlouthi', 'Monate', 'Phoenix', 'Quantum', 'Razor', 'Shadow', 'Thunder', 'Viper',
+            'Wolf', 'Xenon', 'Yoda', 'Zephyr', 'Alpha', 'Beta', 'Gamma', 'Delta',
+            'Echo', 'Foxtrot', 'Golf', 'Hotel', 'India', 'Juliett', 'Kilo', 'Lima',
+            'Mike', 'November', 'Oscar', 'Papa', 'Quebec', 'Romeo', 'Sierra', 'Tango'
+        ]; // Expanded to 48 names
 
-            setupBracket() {
-                // Sample participants for demonstration
-                this.participants = [
-                    'Team Alpha', 'Team Beta', 'Team Gamma', 'Team Delta',
-                    'Team Echo', 'Team Foxtrot', 'Team Golf', 'Team Hotel',
-                    'Team India', 'Team Juliet', 'Team Kilo', 'Team Lima',
-                    'Team Mike', 'Team November', 'Team Oscar', 'Team Papa'
-                ];
+        participantNames.forEach(name => {
+            allTournamentParticipants.push({ name, ...generateRandomStats() });
+        });
 
-                // Populate first round with participants
-                this.populateFirstRound();
-            }
-
-            populateFirstRound() {
-                const firstRound = document.querySelector('.round:first-child .round-matches');
-                const matches = firstRound.querySelectorAll('.match');
-                
-                matches.forEach((match, index) => {
-                    const participants = match.querySelectorAll('.participant');
-                    if (index * 2 < this.participants.length) {
-                        participants[0].textContent = this.participants[index * 2] || 'TBD';
-                        participants[0].classList.remove('tbd');
-                    }
-                    if (index * 2 + 1 < this.participants.length) {
-                        participants[1].textContent = this.participants[index * 2 + 1] || 'TBD';
-                        participants[1].classList.remove('tbd');
-                    }
-                });
-            }
-
-            addEventListeners() {
-                const participants = document.querySelectorAll('.participant');
-                participants.forEach(participant => {
-                    participant.addEventListener('click', (e) => {
-                        this.handleParticipantClick(e.target);
-                    });
-                });
-            }
-
-            handleParticipantClick(participant) {
-                if (participant.classList.contains('tbd')) return;
-
-                const match = participant.closest('.match');
-                const participants = match.querySelectorAll('.participant');
-                
-                // Remove winner class from all participants in this match
-                participants.forEach(p => p.classList.remove('winner'));
-                
-                // Add winner class to clicked participant
-                participant.classList.add('winner');
-                
-                // Advance winner to next round
-                this.advanceWinner(participant, match);
-            }
-
-            advanceWinner(winner, match) {
-                const round = match.closest('.round');
-                const nextRound = round.nextElementSibling;
-                
-                if (!nextRound) return; // Already in final round
-                
-                const roundMatches = round.querySelectorAll('.match');
-                const matchIndex = Array.from(roundMatches).indexOf(match);
-                const nextRoundMatches = nextRound.querySelectorAll('.match');
-                const nextMatchIndex = Math.floor(matchIndex / 2);
-                const nextMatch = nextRoundMatches[nextMatchIndex];
-                
-                if (nextMatch) {
-                    const nextParticipants = nextMatch.querySelectorAll('.participant');
-                    const slotIndex = matchIndex % 2;
-                    
-                    if (nextParticipants[slotIndex]) {
-                        nextParticipants[slotIndex].textContent = winner.textContent;
-                        nextParticipants[slotIndex].classList.remove('tbd');
-                    }
-                }
-            }
-
-            // Method to reset bracket
-            resetBracket() {
-                const allParticipants = document.querySelectorAll('.participant');
-                allParticipants.forEach(participant => {
-                    participant.classList.remove('winner');
-                    if (!participant.closest('.round:first-child')) {
-                        participant.textContent = 'TBD';
-                        participant.classList.add('tbd');
-                    }
-                });
-            }
-
-            // Method to simulate tournament progression
-            simulateTournament() {
-                const rounds = document.querySelectorAll('.round');
-                rounds.forEach((round, roundIndex) => {
-                    setTimeout(() => {
-                        const matches = round.querySelectorAll('.match');
-                        matches.forEach(match => {
-                            const participants = match.querySelectorAll('.participant:not(.tbd)');
-                            if (participants.length === 2) {
-                                const randomWinner = participants[Math.floor(Math.random() * participants.length)];
-                                this.handleParticipantClick(randomWinner);
-                            }
-                        });
-                    }, roundIndex * 1000);
-                });
+        // Function to shuffle an array (Fisher-Yates algorithm)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
             }
         }
 
-        // Initialize tournament bracket
-        const tournament = new TournamentBracket();
+        // Function to assign participants to 8 pools, 6 per pool
+        function assignParticipantsToPools() {
+            shuffleArray(allTournamentParticipants); // Shuffle participants first
+            const pools = [];
+            const poolNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+            let participantIndex = 0;
 
-        // Add keyboard shortcuts for demo
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'r' && e.ctrlKey) {
-                e.preventDefault();
-                tournament.resetBracket();
+            for (let i = 0; i < 8; i++) {
+                const poolParticipants = allTournamentParticipants.slice(participantIndex, participantIndex + 6);
+                pools.push({
+                    name: `Pool ${poolNames[i]}`,
+                    participants: poolParticipants.sort((a, b) => b.pts - a.pts) // Sort by points within pool
+                });
+                participantIndex += 6;
             }
-            if (e.key === 's' && e.ctrlKey) {
-                e.preventDefault();
-                tournament.simulateTournament();
-            }
-        });
+            return pools;
+        }
 
-        // Add a simple demo button for mobile users
-        const demoButton = document.createElement('button');
-        demoButton.textContent = 'Simulate Tournament';
-        demoButton.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #4a9eff;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            transition: all 0.2s ease;
-            z-index: 1000;
-        `;
-        
-        demoButton.addEventListener('click', () => {
-            tournament.simulateTournament();
+        // Function to render pools and participants
+        function renderPools() {
+            const poolsGrid = document.getElementById('poolsGrid');
+            poolsGrid.innerHTML = ''; // Clear existing content
+
+            const poolsData = assignParticipantsToPools();
+
+            poolsData.forEach((pool, poolIndex) => {
+                const poolContainer = document.createElement('div');
+                poolContainer.className = 'pool-container';
+                poolContainer.innerHTML = `
+                    <h3 class="pool-title">${pool.name}</h3>
+                    <div class="pool-table-header">
+                        <div>Club</div>
+                        <div>MP</div>
+                        <div>W</div>
+                        <div>D</div>
+                        <div>L</div>
+                        <div>GF</div>
+                        <div>GA</div>
+                        <div>GD</div>
+                        <div>Pts</div>
+                        <div>Last 5</div>
+                    </div>
+                    <div class="pool-participants-list">
+                        <!-- Participant rows will be inserted here -->
+                    </div>
+                `;
+
+                const poolParticipantsList = poolContainer.querySelector('.pool-participants-list');
+
+                pool.participants.forEach((participant, participantIndex) => {
+                    const participantRow = document.createElement('div');
+                    participantRow.className = 'pool-participant-row';
+
+                    const last5Html = participant.last5.map(result => {
+                        let className = '';
+                        if (result === 'W') className = 'win';
+                        else if (result === 'L') className = 'loss';
+                        else if (result === 'D') className = 'draw';
+                        return `<div class="last-5-result-item ${className}">${result}</div>`;
+                    }).join('');
+
+                    participantRow.innerHTML = `
+                        <div class="player-name">${participant.name}</div>
+                        <div>${participant.mp}</div>
+                        <div>${participant.w}</div>
+                        <div>${participant.d}</div>
+                        <div>${participant.l}</div>
+                        <div>${participant.gf}</div>
+                        <div>${participant.ga}</div>
+                        <div>${participant.gd}</div>
+                        <div>${participant.pts}</div>
+                        <div class="last-5-results">${last5Html}</div>
+                    `;
+                    poolParticipantsList.appendChild(participantRow);
+                });
+                poolsGrid.appendChild(poolContainer);
+            });
+        }
+
+        // Navigation functionality (reused from previous files)
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.nav-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const tabName = this.textContent;
+                    console.log(`Switching to ${tabName} tab`);
+                });
+            });
+
+            // Initial render of pools
+            renderPools();
         });
-        
-        demoButton.addEventListener('mouseenter', () => {
-            demoButton.style.background = '#357abd';
-            demoButton.style.transform = 'translateY(-2px)';
-        });
-        
-        demoButton.addEventListener('mouseleave', () => {
-            demoButton.style.background = '#4a9eff';
-            demoButton.style.transform = 'translateY(0)';
-        });
-        
-        document.body.appendChild(demoButton);
     </script>
 </body>
 </html>

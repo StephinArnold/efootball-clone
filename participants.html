@@ -262,20 +262,6 @@
             font-size: 0.9rem;
         }
 
-        .participant-status {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #4ade80;
-            flex-shrink: 0;
-            box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.3);
-        }
-
-        .participant-status.offline {
-            background: #6b7280;
-            box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.3);
-        }
-
         /* Loading Animation */
         .loading-skeleton {
             background: linear-gradient(90deg, #2d3e5f 25%, #3a4d6b 50%, #2d3e5f 75%);
@@ -409,18 +395,16 @@
                     </div>
                 </div>
                 <div class="tournament-actions">
-                    <div class="registration-status">Registration open</div>
-                </div>
+                    </div>
             </div>
         </div>
 
         <div class="nav-tabs">
-            <!-- <a href="index.html" class="nav-tab">Overview</a> -->
             <a href="stages.html" class="nav-tab">Stages</a>
-            <div class="nav-tab">Matches</div>
+            <div href="matches.html" class="nav-tab">Matches</div>
             <a href="participants.html" class="nav-tab active">Participants</a>
             <a href="index.html" class="nav-tab">Rules</a>
-            <!-- <div class="nav-tab">Streams & VODs</div> -->
+            <div class="nav-tab">Auction</div>
         </div>
 
         <div class="participants-content">
@@ -430,8 +414,7 @@
 
             <div class="participants-controls">
                 <input type="text" class="search-box" placeholder="Search participants..." id="searchInput">
-                <button class="filter-button" onclick="toggleFilter()">Filter Online</button>
-            </div>
+                </div>
 
             <div class="participants-grid" id="participantsGrid">
                 </div>
@@ -439,44 +422,44 @@
     </div>
 
     <script>
-        // Participants data
+        // Participants data - 'online' property removed
         const participants = [
-            { name: 'Ako', id: 'ako_player', online: true, highlighted: false },
-            { name: 'Andrewar85', id: 'andrewar85_gamer', online: true, highlighted: false },
-            { name: 'anzil', id: 'anzil_pro', online: false, highlighted: false },
-            { name: 'Ashh', id: 'ashh_player', online: true, highlighted: false },
-            { name: 'asish__009', id: 'asish009_gamer', online: true, highlighted: false },
-            { name: 'BEASTg9', id: 'beastg9_pro', online: false, highlighted: false },
-            { name: 'Chris', id: 'chris_player', online: true, highlighted: false },
-            { name: 'CyberknightZH', id: 'cyberknight_zh', online: true, highlighted: true },
-            { name: 'Diamo12', id: 'diamo12_gamer', online: false, highlighted: false },
-            { name: 'FK04', id: 'fk04_player', online: true, highlighted: false },
-            { name: 'Gamingsolutions', id: 'gaming_solutions', online: true, highlighted: false },
-            { name: 'Hamada', id: 'hamada_pro', online: false, highlighted: false },
-            { name: 'ide5219', id: 'ide5219_player', online: true, highlighted: false },
-            { name: 'Jay', id: 'jay_gamer', online: true, highlighted: false },
-            { name: 'Kaiser', id: 'kaiser_pro', online: false, highlighted: false },
-            { name: 'Lord Maguire', id: 'lord_maguire', online: true, highlighted: false },
-            { name: 'Methlouthi', id: 'methlouthi_player', online: true, highlighted: false },
-            { name: 'Monate', id: 'monate_gamer', online: false, highlighted: false },
-            { name: 'Phoenix', id: 'phoenix_player', online: true, highlighted: false },
-            { name: 'Quantum', id: 'quantum_gamer', online: true, highlighted: false },
-            { name: 'Razor', id: 'razor_pro', online: false, highlighted: false },
-            { name: 'Shadow', id: 'shadow_player', online: true, highlighted: false },
-            { name: 'Thunder', id: 'thunder_gamer', online: true, highlighted: false },
-            { name: 'Viper', id: 'viper_pro', online: false, highlighted: false },
-            { name: 'Wolf', id: 'wolf_player', online: true, highlighted: false },
-            { name: 'Xenon', id: 'xenon_gamer', online: true, highlighted: false },
-            { name: 'Yoda', id: 'yoda_pro', online: false, highlighted: false },
-            { name: 'Zephyr', id: 'zephyr_player', online: true, highlighted: false },
-            { name: 'Alpha', id: 'alpha_gamer', online: true, highlighted: false },
-            { name: 'Beta', id: 'beta_pro', online: false, highlighted: false },
-            { name: 'Gamma', id: 'gamma_player', online: true, highlighted: false },
-            { name: 'Delta', id: 'delta_gamer', online: true, highlighted: false }
+            { name: 'Ako', id: 'ako_player', highlighted: false },
+            { name: 'Andrewar85', id: 'andrewar85_gamer', highlighted: false },
+            { name: 'anzil', id: 'anzil_pro', highlighted: false },
+            { name: 'Ashh', id: 'ashh_player', highlighted: false },
+            { name: 'asish__009', id: 'asish009_gamer', highlighted: false },
+            { name: 'BEASTg9', id: 'beastg9_pro', highlighted: false },
+            { name: 'Chris', id: 'chris_player', highlighted: false },
+            { name: 'CyberknightZH', id: 'cyberknight_zh', highlighted: true },
+            { name: 'Diamo12', id: 'diamo12_gamer', highlighted: false },
+            { name: 'FK04', id: 'fk04_player', highlighted: false },
+            { name: 'Gamingsolutions', id: 'gaming_solutions', highlighted: false },
+            { name: 'Hamada', id: 'hamada_pro', highlighted: false },
+            { name: 'ide5219', id: 'ide5219_player', highlighted: false },
+            { name: 'Jay', id: 'jay_gamer', highlighted: false },
+            { name: 'Kaiser', id: 'kaiser_pro', highlighted: false },
+            { name: 'Lord Maguire', id: 'lord_maguire', highlighted: false },
+            { name: 'Methlouthi', id: 'methlouthi_player', highlighted: false },
+            { name: 'Monate', id: 'monate_gamer', highlighted: false },
+            { name: 'Phoenix', id: 'phoenix_player', highlighted: false },
+            { name: 'Quantum', id: 'quantum_gamer', highlighted: false },
+            { name: 'Razor', id: 'razor_pro', highlighted: false },
+            { name: 'Shadow', id: 'shadow_player', highlighted: false },
+            { name: 'Thunder', id: 'thunder_gamer', highlighted: false },
+            { name: 'Viper', id: 'viper_pro', highlighted: false },
+            { name: 'Wolf', id: 'wolf_player', highlighted: false },
+            { name: 'Xenon', id: 'xenon_gamer', highlighted: false },
+            { name: 'Yoda', id: 'yoda_pro', highlighted: false },
+            { name: 'Zephyr', id: 'zephyr_player', highlighted: false },
+            { name: 'Alpha', id: 'alpha_gamer', highlighted: false },
+            { name: 'Beta', id: 'beta_pro', highlighted: false },
+            { name: 'Gamma', id: 'gamma_player', highlighted: false },
+            { name: 'Delta', id: 'delta_gamer', highlighted: false }
         ];
 
         let filteredParticipants = [...participants];
-        let showOnlineOnly = false;
+        // 'showOnlineOnly' variable removed
 
         // Generate avatar letter
         function getAvatarLetter(name) {
@@ -495,8 +478,7 @@
                     <div class="participant-name">${participant.name}</div>
                     <div class="participant-id">${participant.id}</div>
                 </div>
-                <div class="participant-status ${participant.online ? '' : 'offline'}"></div>
-            `;
+                `;
             
             card.addEventListener('click', () => {
                 // Toggle highlight
@@ -527,32 +509,12 @@
                 participant.id.toLowerCase().includes(query.toLowerCase())
             );
             
-            if (showOnlineOnly) {
-                filteredParticipants = filteredParticipants.filter(p => p.online);
-            }
+            // Online filter logic removed
             
             renderParticipants();
         }
 
-        // Filter functionality
-        function toggleFilter() {
-            const button = document.querySelector('.filter-button');
-            showOnlineOnly = !showOnlineOnly;
-            
-            if (showOnlineOnly) {
-                button.textContent = 'Show All';
-                button.style.background = '#ef4444';
-                filteredParticipants = filteredParticipants.filter(p => p.online);
-            } else {
-                button.textContent = 'Filter Online';
-                button.style.background = '#3b82f6';
-                const searchQuery = document.getElementById('searchInput').value;
-                searchParticipants(searchQuery);
-                return;
-            }
-            
-            renderParticipants();
-        }
+        // 'toggleFilter' function removed
 
         // Navigation functionality
         document.addEventListener('DOMContentLoaded', function() {
@@ -584,26 +546,10 @@
                 e.preventDefault();
                 document.getElementById('searchInput').focus();
             }
-            if (e.key === 'f' && e.ctrlKey) {
-                e.preventDefault();
-                toggleFilter();
-            }
+            // 'Ctrl + f' shortcut removed
         });
 
-        // Simulate real-time updates
-        setInterval(() => {
-            // Randomly change online status
-            const randomIndex = Math.floor(Math.random() * participants.length);
-            participants[randomIndex].online = Math.random() > 0.3;
-            
-            // Re-render if currently showing filtered results
-            if (showOnlineOnly) {
-                const searchQuery = document.getElementById('searchInput').value;
-                searchParticipants(searchQuery);
-            } else {
-                renderParticipants();
-            }
-        }, 10000); // Update every 10 seconds
+        // Simulated real-time updates (removed)
     </script>
 </body>
 </html>

@@ -379,7 +379,7 @@
             <div class="nav-tab">Matches</div>
             <a href="participants.html" class="nav-tab">Participants</a>
             <a href="index.html" class="nav-tab">Rules</a>
-            <!-- <div class="nav-tab">Streams & VODs</div> -->
+            <div class="nav-tab">Auction</div>
         </div>
 
         <div class="bracket-container">
@@ -532,52 +532,52 @@
             }
 
             addEventListeners() {
-                const participants = document.querySelectorAll('.participant');
-                participants.forEach(participant => {
-                    participant.addEventListener('click', (e) => {
-                        this.handleParticipantClick(e.target);
-                    });
-                });
+                // const participants = document.querySelectorAll('.participant');
+                // participants.forEach(participant => {
+                //     participant.addEventListener('click', (e) => {
+                //         this.handleParticipantClick(e.target);
+                //     });
+                // });
             }
 
-            handleParticipantClick(participant) {
-                if (participant.classList.contains('tbd')) return;
+            // handleParticipantClick(participant) {
+            //     if (participant.classList.contains('tbd')) return;
 
-                const match = participant.closest('.match');
-                const participants = match.querySelectorAll('.participant');
+            //     const match = participant.closest('.match');
+            //     const participants = match.querySelectorAll('.participant');
                 
-                // Remove winner class from all participants in this match
-                participants.forEach(p => p.classList.remove('winner'));
+            //     // Remove winner class from all participants in this match
+            //     participants.forEach(p => p.classList.remove('winner'));
                 
-                // Add winner class to clicked participant
-                participant.classList.add('winner');
+            //     // Add winner class to clicked participant
+            //     participant.classList.add('winner');
                 
-                // Advance winner to next round
-                this.advanceWinner(participant, match);
-            }
+            //     // Advance winner to next round
+            //     this.advanceWinner(participant, match);
+            // }
 
-            advanceWinner(winner, match) {
-                const round = match.closest('.round');
-                const nextRound = round.nextElementSibling;
+            // advanceWinner(winner, match) {
+            //     const round = match.closest('.round');
+            //     const nextRound = round.nextElementSibling;
                 
-                if (!nextRound) return; // Already in final round
+            //     if (!nextRound) return; // Already in final round
                 
-                const roundMatches = round.querySelectorAll('.match');
-                const matchIndex = Array.from(roundMatches).indexOf(match);
-                const nextRoundMatches = nextRound.querySelectorAll('.match');
-                const nextMatchIndex = Math.floor(matchIndex / 2);
-                const nextMatch = nextRoundMatches[nextMatchIndex];
+            //     const roundMatches = round.querySelectorAll('.match');
+            //     const matchIndex = Array.from(roundMatches).indexOf(match);
+            //     const nextRoundMatches = nextRound.querySelectorAll('.match');
+            //     const nextMatchIndex = Math.floor(matchIndex / 2);
+            //     const nextMatch = nextRoundMatches[nextMatchIndex];
                 
-                if (nextMatch) {
-                    const nextParticipants = nextMatch.querySelectorAll('.participant');
-                    const slotIndex = matchIndex % 2;
+            //     if (nextMatch) {
+            //         const nextParticipants = nextMatch.querySelectorAll('.participant');
+            //         const slotIndex = matchIndex % 2;
                     
-                    if (nextParticipants[slotIndex]) {
-                        nextParticipants[slotIndex].textContent = winner.textContent;
-                        nextParticipants[slotIndex].classList.remove('tbd');
-                    }
-                }
-            }
+            //         if (nextParticipants[slotIndex]) {
+            //             nextParticipants[slotIndex].textContent = winner.textContent;
+            //             nextParticipants[slotIndex].classList.remove('tbd');
+            //         }
+            //     }
+            // }
 
             // Method to reset bracket
             resetBracket() {
@@ -625,39 +625,39 @@
         });
 
         // Add a simple demo button for mobile users
-        const demoButton = document.createElement('button');
-        demoButton.textContent = 'Simulate Tournament';
-        demoButton.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #4a9eff;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            transition: all 0.2s ease;
-            z-index: 1000;
-        `;
+        // const demoButton = document.createElement('button');
+        // demoButton.textContent = 'Simulate Tournament';
+        // demoButton.style.cssText = `
+        //     position: fixed;
+        //     bottom: 20px;
+        //     right: 20px;
+        //     background: #4a9eff;
+        //     color: white;
+        //     border: none;
+        //     padding: 12px 20px;
+        //     border-radius: 6px;
+        //     cursor: pointer;
+        //     font-size: 14px;
+        //     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        //     transition: all 0.2s ease;
+        //     z-index: 1000;
+        // `;
         
-        demoButton.addEventListener('click', () => {
-            tournament.simulateTournament();
-        });
+        // demoButton.addEventListener('click', () => {
+        //     tournament.simulateTournament();
+        // });
         
-        demoButton.addEventListener('mouseenter', () => {
-            demoButton.style.background = '#357abd';
-            demoButton.style.transform = 'translateY(-2px)';
-        });
+        // demoButton.addEventListener('mouseenter', () => {
+        //     demoButton.style.background = '#357abd';
+        //     demoButton.style.transform = 'translateY(-2px)';
+        // });
         
-        demoButton.addEventListener('mouseleave', () => {
-            demoButton.style.background = '#4a9eff';
-            demoButton.style.transform = 'translateY(0)';
-        });
+        // demoButton.addEventListener('mouseleave', () => {
+        //     demoButton.style.background = '#4a9eff';
+        //     demoButton.style.transform = 'translateY(0)';
+        // });
         
-        document.body.appendChild(demoButton);
+        // document.body.appendChild(demoButton);
     </script>
 </body>
 </html>
