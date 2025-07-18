@@ -165,6 +165,9 @@
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            /* Allow horizontal scrolling for tabs on small screens */
+            white-space: nowrap;
+            overflow-x: auto;
         }
 
         .nav-tab {
@@ -176,6 +179,8 @@
             border-bottom: 3px solid transparent;
             color: #8e9aaf;
             font-weight: 500;
+            text-decoration: none; /* Remove underline from links */
+            flex-shrink: 0; /* Prevent tabs from shrinking on overflow */
         }
 
         .nav-tab:hover {
@@ -287,7 +292,12 @@
             }
 
             .nav-tabs {
-                flex-direction: column;
+                flex-direction: row; /* Keep tabs horizontal but allow scrolling */
+                white-space: nowrap;
+                overflow-x: auto;
+            }
+            .nav-tab {
+                flex-shrink: 0; /* Prevent tabs from shrinking */
             }
 
             .main-content {
@@ -300,6 +310,49 @@
 
             .hero-banner {
                 height: 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tournament-header,
+            .nav-tabs,
+            .main-content {
+                margin-left: 10px;
+                margin-right: 10px;
+                padding: 15px; /* Reduce padding for tighter layout */
+            }
+
+            .tournament-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 30px;
+            }
+
+            .tournament-details h1 {
+                font-size: 1.8rem;
+            }
+
+            .tournament-meta {
+                font-size: 0.9rem;
+            }
+
+            .nav-tab {
+                padding: 12px 10px; /* Smaller padding for nav tabs */
+                font-size: 0.9rem;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+
+            .section-content,
+            .schedule-label,
+            .schedule-value {
+                font-size: 0.9rem;
+            }
+
+            .timezone {
+                font-size: 0.8rem;
             }
         }
 
@@ -347,13 +400,13 @@
             </div>
         </div>
 
-        <div class="nav-tabs">
+        <nav class="nav-tabs">
             <a href="stages.html" class="nav-tab">Stages</a>
-            <a href="matches.html"class="nav-tab">Matches</a>
+            <a href="matches.html" class="nav-tab">Matches</a>
             <a href="participants.html" class="nav-tab">Participants</a>
-            <a href="index.html" class="nav-tab active">Rules</a>
+            <a href="index.html" class="nav-tab active" aria-current="page">Rules</a>
             <a href="auction.html" class="nav-tab">Auction</a>
-        </div>
+        </nav>
 
         <div class="main-content">
             <div class="content-left">
@@ -402,15 +455,11 @@
                     this.classList.add('active');
                     
                     // Here you would typically load different content
-                    // For now, we'll just show an alert
+                    // For now, we'll just log to console
                     const tabName = this.textContent;
-                    if (tabName !== 'Rules') {
-                        console.log(`Switching to ${tabName} tab`);
-                    }
+                    console.log(`Switching to ${tabName} tab`);
                 });
             });
-
-            // Register button functionality - REMOVED
 
             // WhatsApp link click tracking
             const whatsappLink = document.querySelector('.whatsapp-link');
@@ -419,7 +468,7 @@
                 // You can add analytics tracking here
             });
 
-            // Add smooth scrolling for better UX
+            // Add smooth scrolling for better UX (for internal anchor links, though not used in this specific HTML)
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -429,10 +478,10 @@
                 });
             });
 
-            // Add animation on scroll
+            // Add animation on scroll (for content sections)
             const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
+                threshold: 0.1, // Trigger when 10% of the element is visible
+                rootMargin: '0px 0px -50px 0px' // Adjust trigger point
             };
 
             const observer = new IntersectionObserver((entries) => {
@@ -444,8 +493,10 @@
                 });
             }, observerOptions);
 
-            // Observe all content sections
+            // Observe all content sections for fade-in animation
             document.querySelectorAll('.content-section').forEach(section => {
+                section.style.opacity = '0'; // Start invisible
+                section.style.transform = 'translateY(20px)'; // Start slightly below
                 observer.observe(section);
             });
         });
@@ -453,7 +504,7 @@
         // Add typing effect to tournament title
         function typeWriter(element, text, speed = 50) {
             let i = 0;
-            element.textContent = '';
+            element.textContent = ''; // Clear initial text
             
             function type() {
                 if (i < text.length) {
@@ -463,14 +514,14 @@
                 }
             }
             
-            type();
+            type(); // Start typing
         }
 
-        // Initialize typing effect
+        // Initialize typing effect on window load
         window.addEventListener('load', function() {
             const titleElement = document.querySelector('.tournament-details h1');
-            const originalText = titleElement.textContent;
-            typeWriter(titleElement, originalText, 80);
+            const originalText = titleElement.textContent; // Get the full text
+            typeWriter(titleElement, originalText, 80); // Apply typing effect
         });
     </script>
 </body>

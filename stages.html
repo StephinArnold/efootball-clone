@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tournament Bracket</title>
     <style>
+        /* Base styles */
         * {
             margin: 0;
             padding: 0;
@@ -15,14 +16,15 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #1a1a2e;
             color: #ffffff;
-            overflow-x: auto;
-            line-height: 1.6; /* Added for consistency with index.html */
+            overflow-x: auto; /* Allow horizontal scrolling for the bracket */
+            line-height: 1.6;
         }
 
-        /* Hero Banner (Copied from index.html) */
+        /* Hero Banner - Consistent across pages */
         .hero-banner {
             height: 200px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            /* SVG background for visual flair */
             background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 200"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23FF6B6B;stop-opacity:1" /><stop offset="50%" style="stop-color:%234ECDC4;stop-opacity:1" /><stop offset="100%" style="stop-color:%2345B7D1;stop-opacity:1" /></linearGradient></defs><rect width="1200" height="200" fill="url(%23grad)"/><circle cx="900" cy="100" r="80" fill="%23FFE66D" opacity="0.3"/><circle cx="1100" cy="50" r="60" fill="%23FF6B6B" opacity="0.2"/><polygon points="200,50 350,150 50,150" fill="%23A8E6CF" opacity="0.15"/></svg>');
             background-size: cover;
             background-position: center;
@@ -53,7 +55,7 @@
             background-size: 200px 100px;
         }
 
-        /* Main Container */
+        /* Main Content Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -61,17 +63,18 @@
             z-index: 1;
         }
 
-        /* Tournament Header (Copied from index.html) */
+        /* Tournament Header - Consistent across pages */
         .tournament-header {
             background: #16213e;
             padding: 30px;
-            margin-top: -60px;
+            margin-top: -60px; /* Overlap with banner */
             border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             position: relative;
             z-index: 2;
             margin-left: 20px;
             margin-right: 20px;
+            animation: fadeIn 0.8s ease-out; /* Fade-in animation */
         }
 
         .tournament-info {
@@ -106,7 +109,7 @@
             font-weight: 700;
             margin-bottom: 8px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
+            -webkit-background-clip: text; /* For text gradient effect */
             -webkit-text-fill-color: transparent;
         }
 
@@ -126,30 +129,35 @@
         }
 
         .registration-status {
-            color: #4ade80;
+            color: #4ade80; /* Green color for status */
             font-size: 1rem;
             font-weight: 600;
         }
 
+        /* Navigation Tabs - Consistent across pages */
         .nav-tabs {
             display: flex;
             background: #16213e;
-            margin: 20px; /* Adjusted margin for consistency */
-            border-radius: 12px; /* Added border-radius for consistency */
-            overflow: hidden; /* Added overflow for consistency */
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); /* Added box-shadow for consistency */
+            margin: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            /* Allow horizontal scrolling for tabs on small screens */
+            white-space: nowrap;
+            overflow-x: auto;
         }
 
         .nav-tab {
-            flex: 1; /* Added flex for equal width tabs */
-            padding: 16px 20px; /* Adjusted padding for consistency */
-            text-align: center; /* Centered text for consistency */
+            flex: 1; /* Distribute space equally */
+            padding: 16px 20px;
+            text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            border-bottom: 3px solid transparent; /* Adjusted border for consistency */
+            border-bottom: 3px solid transparent;
             color: #8e9aaf;
-            font-weight: 500; /* Adjusted font-weight for consistency */
-            text-decoration: none; /* Ensure links don't have underlines */
+            font-weight: 500;
+            text-decoration: none; /* Remove underline from links */
+            flex-shrink: 0; /* Prevent tabs from shrinking on overflow */
         }
 
         .nav-tab:hover {
@@ -158,30 +166,31 @@
         }
 
         .nav-tab.active {
-            color: #3b82f6; /* Adjusted color for consistency */
-            border-bottom-color: #3b82f6; /* Adjusted color for consistency */
-            background: rgba(59, 130, 246, 0.1); /* Adjusted background for consistency */
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
         }
 
+        /* Bracket Specific Styles */
         .bracket-container {
             padding: 30px;
-            overflow-x: auto;
-            min-height: calc(100vh - 60px);
+            overflow-x: auto; /* Enable horizontal scrolling for the bracket content */
+            min-height: calc(100vh - 60px); /* Ensure container takes up most of the viewport height */
         }
 
         .bracket {
             display: flex;
-            gap: 80px;
-            min-width: 1200px;
-            justify-content: center;
-            align-items: flex-start;
+            gap: 80px; /* Space between rounds */
+            min-width: 1200px; /* Minimum width to ensure horizontal scroll on smaller screens */
+            justify-content: center; /* Center the bracket horizontally */
+            align-items: flex-start; /* Align rounds to the top */
         }
 
         .round {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 30px;
+            gap: 30px; /* Space between round title and matches */
         }
 
         .round-title {
@@ -194,7 +203,8 @@
         .round-matches {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 20px; /* Space between individual matches */
+            position: relative; /* For connecting lines */
         }
 
         .match {
@@ -217,14 +227,14 @@
             padding: 15px 20px;
             background: #2d3e5f;
             border-bottom: 1px solid #3a4d6b;
-            cursor: pointer;
+            cursor: pointer; /* Indicate interactivity */
             transition: background 0.2s ease;
-            min-width: 200px;
+            min-width: 200px; /* Minimum width for participant name */
             color: #ffffff;
         }
 
         .participant:last-child {
-            border-bottom: none;
+            border-bottom: none; /* No border for the last participant in a match */
         }
 
         .participant:hover {
@@ -232,21 +242,21 @@
         }
 
         .participant.winner {
-            background: #1e3a5f;
-            color: #4a9eff;
+            background: #1e3a5f; /* Different background for winner */
+            color: #4a9eff; /* Blue text for winner */
             font-weight: 600;
         }
 
         .participant.tbd {
-            color: #6c7b8a;
+            color: #6c7b8a; /* Gray for "To Be Determined" */
             font-style: italic;
         }
 
-        /* Connecting lines */
+        /* Connecting lines between matches and rounds */
         .match::after {
             content: '';
             position: absolute;
-            right: -40px;
+            right: -40px; /* Extend line to the right */
             top: 50%;
             width: 40px;
             height: 2px;
@@ -255,14 +265,14 @@
         }
 
         .round:last-child .match::after {
-            display: none;
+            display: none; /* No outgoing line from the final match */
         }
 
         /* Vertical connecting lines for bracket structure */
         .round-matches::before {
             content: '';
             position: absolute;
-            left: calc(100% + 20px);
+            left: calc(100% + 20px); /* Position between rounds */
             top: 0;
             bottom: 0;
             width: 2px;
@@ -270,18 +280,18 @@
         }
 
         .round:last-child .round-matches::before {
-            display: none;
+            display: none; /* No vertical line after the last round */
         }
 
         /* Responsive design */
         @media (max-width: 768px) {
             .bracket {
-                gap: 40px;
-                min-width: 800px;
+                gap: 40px; /* Reduced gap between rounds */
+                min-width: 800px; /* Adjust min-width for smaller screens */
             }
             
             .participant {
-                min-width: 150px;
+                min-width: 150px; /* Smaller min-width for participants */
                 padding: 12px 16px;
                 font-size: 14px;
             }
@@ -290,26 +300,43 @@
                 font-size: 16px;
             }
 
-            /* Responsive adjustments for header */
+            /* Responsive adjustments for header and navigation */
             .tournament-info {
-                flex-direction: column;
+                flex-direction: column; /* Stack info vertically */
                 align-items: stretch;
             }
 
             .tournament-actions {
                 align-items: stretch;
             }
+        }
 
-            .nav-tabs {
-                flex-direction: column;
+        @media (max-width: 480px) {
+            .tournament-header,
+            .nav-tabs,
+            .bracket-container {
+                margin-left: 10px;
+                margin-right: 10px;
+                padding: 15px; /* Reduce padding for tighter layout */
+            }
+
+            .tournament-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 30px;
             }
 
             .tournament-details h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
 
             .hero-banner {
                 height: 150px;
+            }
+
+            .nav-tab {
+                padding: 12px 10px; /* Smaller padding for nav tabs */
+                font-size: 0.9rem;
             }
         }
 
@@ -325,11 +352,7 @@
             }
         }
 
-        .tournament-header {
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        /* Custom scrollbar */
+        /* Custom scrollbar for horizontal overflow */
         ::-webkit-scrollbar {
             height: 8px;
         }
@@ -373,14 +396,14 @@
             </div>
         </div>
 
-        <div class="nav-tabs">
-            <!-- <a href="index.html" class="nav-tab">Overview</a> -->
-            <a href="stages.html" class="nav-tab active">Stages</a>
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <a href="stages.html" class="nav-tab active" aria-current="page">Stages</a>
             <a href="matches.html" class="nav-tab">Matches</a>
             <a href="participants.html" class="nav-tab">Participants</a>
             <a href="index.html" class="nav-tab">Rules</a>
-            <a href="auction.html" class="nav-tab">Auction</div>
-        </div>
+            <a href="auction.html" class="nav-tab">Auction</a>
+        </nav>
 
         <div class="bracket-container">
             <div class="bracket" id="bracket">
@@ -479,18 +502,23 @@
         // Tournament bracket functionality
         class TournamentBracket {
             constructor() {
-                this.participants = [];
-                this.matches = [];
-                this.currentRound = 1;
+                // Sample participants for demonstration, 16 for a 4-round single-elimination bracket
+                this.participants = [
+                    'Team Alpha', 'Team Beta', 'Team Gamma', 'Team Delta',
+                    'Team Echo', 'Team Foxtrot', 'Team Golf', 'Team Hotel',
+                    'Team India', 'Team Juliet', 'Team Kilo', 'Team Lima',
+                    'Team Mike', 'Team November', 'Team Oscar', 'Team Papa'
+                ];
                 this.init();
             }
 
             init() {
                 this.setupNavigation();
-                this.setupBracket();
+                this.populateFirstRound(); // Populate the first round with actual participant names
                 this.addEventListeners();
             }
 
+            // Sets up navigation tab active states
             setupNavigation() {
                 const tabs = document.querySelectorAll('.nav-tab');
                 tabs.forEach(tab => {
@@ -501,37 +529,26 @@
                 });
             }
 
-            setupBracket() {
-                // Sample participants for demonstration
-                this.participants = [
-                    'TBD', 'TBD', 'TBD', 'TBD',
-                    'TBD ', 'TBD', 'TBD', 'TBD',
-                    'TBD', 'TBD', 'TBD', 'TBD',
-                    'TBD', 'TBD', 'TBD', 'TBD'
-                ];
-
-                // Populate first round with participants
-                this.populateFirstRound();
-            }
-
+            // Populates the first round of the bracket with participant names
             populateFirstRound() {
-                const firstRound = document.querySelector('.round:first-child .round-matches');
-                const matches = firstRound.querySelectorAll('.match');
-                
-                matches.forEach((match, index) => {
+                const firstRoundMatches = document.querySelectorAll('.round:first-child .match');
+                firstRoundMatches.forEach((match, index) => {
                     const participants = match.querySelectorAll('.participant');
+                    // Assign participants to the first round matches
                     if (index * 2 < this.participants.length) {
-                        participants[0].textContent = this.participants[index * 2] || 'TBD';
+                        participants[0].textContent = this.participants[index * 2];
                         participants[0].classList.remove('tbd');
                     }
                     if (index * 2 + 1 < this.participants.length) {
-                        participants[1].textContent = this.participants[index * 2 + 1] || 'TBD';
+                        participants[1].textContent = this.participants[index * 2 + 1];
                         participants[1].classList.remove('tbd');
                     }
                 });
             }
 
+            // Adds event listeners for participant clicks (currently commented out for manual progression)
             addEventListeners() {
+                // Uncomment the following block to enable interactive participant selection for winners
                 // const participants = document.querySelectorAll('.participant');
                 // participants.forEach(participant => {
                 //     participant.addEventListener('click', (e) => {
@@ -540,37 +557,39 @@
                 // });
             }
 
+            // Handles participant click to mark as winner and advance (currently commented out)
             // handleParticipantClick(participant) {
-            //     if (participant.classList.contains('tbd')) return;
+            //     if (participant.classList.contains('tbd')) return; // Cannot select TBD as winner
 
             //     const match = participant.closest('.match');
-            //     const participants = match.querySelectorAll('.participant');
+            //     const participantsInMatch = match.querySelectorAll('.participant');
                 
             //     // Remove winner class from all participants in this match
-            //     participants.forEach(p => p.classList.remove('winner'));
+            //     // participantsInMatch.forEach(p => p.classList.remove('winner'));
                 
             //     // Add winner class to clicked participant
-            //     participant.classList.add('winner');
+            //     // participant.classList.add('winner');
                 
             //     // Advance winner to next round
-            //     this.advanceWinner(participant, match);
+            //     // this.advanceWinner(participant, match);
             // }
 
+            // Advances the winner to the next round (currently commented out)
             // advanceWinner(winner, match) {
             //     const round = match.closest('.round');
             //     const nextRound = round.nextElementSibling;
                 
-            //     if (!nextRound) return; // Already in final round
+            //     if (!nextRound) return; // Already in final round, no next round
                 
             //     const roundMatches = round.querySelectorAll('.match');
             //     const matchIndex = Array.from(roundMatches).indexOf(match);
             //     const nextRoundMatches = nextRound.querySelectorAll('.match');
-            //     const nextMatchIndex = Math.floor(matchIndex / 2);
+            //     const nextMatchIndex = Math.floor(matchIndex / 2); // Determine slot in next round
             //     const nextMatch = nextRoundMatches[nextMatchIndex];
                 
             //     if (nextMatch) {
             //         const nextParticipants = nextMatch.querySelectorAll('.participant');
-            //         const slotIndex = matchIndex % 2;
+            //         const slotIndex = matchIndex % 2; // 0 for top slot, 1 for bottom slot
                     
             //         if (nextParticipants[slotIndex]) {
             //             nextParticipants[slotIndex].textContent = winner.textContent;
@@ -579,85 +598,104 @@
             //     }
             // }
 
-            // Method to reset bracket
+            // Resets the bracket to its initial state
             resetBracket() {
                 const allParticipants = document.querySelectorAll('.participant');
                 allParticipants.forEach(participant => {
                     participant.classList.remove('winner');
+                    // Only reset TBD for matches beyond the first round
+                    // The first round participants are re-populated by populateFirstRound()
                     if (!participant.closest('.round:first-child')) {
                         participant.textContent = 'TBD';
                         participant.classList.add('tbd');
                     }
                 });
+                this.populateFirstRound(); // Re-populate first round after reset
             }
 
-            // Method to simulate tournament progression
+            // Simulates tournament progression by randomly picking winners
             simulateTournament() {
                 const rounds = document.querySelectorAll('.round');
+                let delay = 0;
                 rounds.forEach((round, roundIndex) => {
+                    // Introduce a delay for visual progression
                     setTimeout(() => {
                         const matches = round.querySelectorAll('.match');
                         matches.forEach(match => {
                             const participants = match.querySelectorAll('.participant:not(.tbd)');
-                            if (participants.length === 2) {
+                            // Only simulate if both participants are determined
+                            if (participants.length === 2 && typeof this.handleParticipantClick === 'function') { // Check if handleParticipantClick is defined and is a function
                                 const randomWinner = participants[Math.floor(Math.random() * participants.length)];
-                                this.handleParticipantClick(randomWinner);
+                                // Use try-catch in case handleParticipantClick is not re-enabled
+                                try {
+                                    this.handleParticipantClick(randomWinner);
+                                } catch (error) {
+                                    console.warn("handleParticipantClick is not enabled. Cannot simulate full progression.");
+                                }
                             }
                         });
-                    }, roundIndex * 1000);
+                    }, delay);
+                    delay += 1000; // Increase delay for next round
                 });
             }
         }
 
-        // Initialize tournament bracket
-        const tournament = new TournamentBracket();
+        // Initialize tournament bracket when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            const tournament = new TournamentBracket();
 
-        // Add keyboard shortcuts for demo
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'r' && e.ctrlKey) {
-                e.preventDefault();
-                tournament.resetBracket();
-            }
-            if (e.key === 's' && e.ctrlKey) {
-                e.preventDefault();
+            // Add keyboard shortcuts for demo (Ctrl+R to reset, Ctrl+S to simulate)
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'r' && e.ctrlKey) {
+                    e.preventDefault(); // Prevent browser refresh
+                    tournament.resetBracket();
+                    console.log("Bracket Reset!");
+                }
+                if (e.key === 's' && e.ctrlKey) {
+                    e.preventDefault(); // Prevent browser save dialog
+                    tournament.simulateTournament();
+                    console.log("Simulating Tournament...");
+                }
+            });
+
+            // Optional: Add a simple demo button for mobile users or easy access
+            // Uncomment this block to add a floating button to simulate the tournament
+            /*
+            const demoButton = document.createElement('button');
+            demoButton.textContent = 'Simulate Tournament';
+            demoButton.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #4a9eff;
+                color: white;
+                border: none;
+                padding: 12px 20px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 14px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                transition: all 0.2s ease;
+                z-index: 1000;
+            `;
+            
+            demoButton.addEventListener('click', () => {
                 tournament.simulateTournament();
-            }
+            });
+            
+            demoButton.addEventListener('mouseenter', () => {
+                demoButton.style.background = '#357abd';
+                demoButton.style.transform = 'translateY(-2px)';
+            });
+            
+            demoButton.addEventListener('mouseleave', () => {
+                demoButton.style.background = '#4a9eff';
+                demoButton.style.transform = 'translateY(0)';
+            });
+            
+            document.body.appendChild(demoButton);
+            */
         });
-
-        // Add a simple demo button for mobile users
-        // const demoButton = document.createElement('button');
-        // demoButton.textContent = 'Simulate Tournament';
-        // demoButton.style.cssText = `
-        //     position: fixed;
-        //     bottom: 20px;
-        //     right: 20px;
-        //     background: #4a9eff;
-        //     color: white;
-        //     border: none;
-        //     padding: 12px 20px;
-        //     border-radius: 6px;
-        //     cursor: pointer;
-        //     font-size: 14px;
-        //     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        //     transition: all 0.2s ease;
-        //     z-index: 1000;
-        // `;
-        
-        // demoButton.addEventListener('click', () => {
-        //     tournament.simulateTournament();
-        // });
-        
-        // demoButton.addEventListener('mouseenter', () => {
-        //     demoButton.style.background = '#357abd';
-        //     demoButton.style.transform = 'translateY(-2px)';
-        // });
-        
-        // demoButton.addEventListener('mouseleave', () => {
-        //     demoButton.style.background = '#4a9eff';
-        //     demoButton.style.transform = 'translateY(0)';
-        // });
-        
-        // document.body.appendChild(demoButton);
     </script>
 </body>
 </html>

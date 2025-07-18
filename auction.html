@@ -48,7 +48,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="images/header.webp" viewBox="0 0 100 100"><text x="50" y="50" font-family="Arial Black" font-size="20" fill="white" text-anchor="middle" opacity="0.1">eFootball</text></svg>');
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50" y="50" font-family="Arial Black" font-size="20" fill="white" text-anchor="middle" opacity="0.1">eFootball</text></svg>');
             background-repeat: repeat;
             background-size: 200px 100px;
         }
@@ -262,8 +262,8 @@
             transform: translateY(-1px);
         }
 
-       /* Inline Team Details Container */
-       .team-details-container {
+        /* Inline Team Details Container */
+        .team-details-container {
             margin-top: 15px;
             padding-top: 15px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -278,6 +278,7 @@
             max-height: 500px; /* Max height when expanded (adjust as needed for content) */
             padding-top: 15px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-y: auto; /* Enable vertical scrolling when expanded */
         }
 
         .team-players-grid { /* Renamed from .modal-team-grid for clarity */
@@ -285,31 +286,7 @@
             grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Smaller players, more in a row */
             gap: 10px;
             justify-content: center;
-            /* Allow horizontal scrolling for player cards if they overflow */
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
-            padding-bottom: 10px; /* Add padding for scrollbar visibility */
         }
-
-        /* Style the scrollbar for webkit browsers */
-        .team-players-grid::-webkit-scrollbar {
-            height: 8px;
-        }
-
-        .team-players-grid::-webkit-scrollbar-track {
-            background: #1a2a40;
-            border-radius: 10px;
-        }
-
-        .team-players-grid::-webkit-scrollbar-thumb {
-            background: #3b82f6;
-            border-radius: 10px;
-        }
-
-        .team-players-grid::-webkit-scrollbar-thumb:hover {
-            background: #2563eb;
-        }
-
 
         .team-player-card {
             background: #1a2a40; /* Slightly darker background for player cards */
@@ -320,8 +297,6 @@
             align-items: center;
             gap: 5px;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-            /* Ensure cards don't shrink too much */
-            min-width: 80px;
         }
 
         .team-player-card img {
@@ -352,39 +327,19 @@
                 flex-direction: column;
                 align-items: stretch;
             }
-            /* Ensure the left part of the header stacks and centers its content */
-            .tournament-left {
-                flex-direction: column; /* Stack icon and details */
-                align-items: center; /* Center them when stacked */
-                text-align: center; /* Center text within details */
-            }
-            .tournament-details {
-                text-align: center; /* Ensure text is centered */
-                margin-top: 10px; /* Add some space between icon and text */
-            }
-            .tournament-details h1 {
-                font-size: 2rem;
-                word-break: break-word; /* Ensure long titles wrap */
-            }
-            .tournament-meta {
-                justify-content: center; /* Center meta info */
-            }
+
             .tournament-actions {
                 align-items: stretch;
             }
 
             .nav-tabs {
-                flex-direction: column;
+                flex-direction: row; /* Keep tabs horizontal but allow scrolling */
+                white-space: nowrap;
+                overflow-x: auto;
             }
 
-            .nav-tab {
-                border-bottom: none; /* Remove bottom border for stacked tabs */
-                border-left: 3px solid transparent; /* Use left border for active state */
-            }
-
-            .nav-tab.active {
-                border-bottom-color: transparent;
-                border-left-color: #3b82f6;
+            .tournament-details h1 {
+                font-size: 2rem;
             }
 
             .hero-banner {
@@ -392,6 +347,7 @@
             }
 
             .auction-participant-box {
+                /* Already column flex for small screens due to default .auction-participant-box */
                 align-items: flex-start;
             }
 
@@ -405,26 +361,18 @@
                 margin-left: 0; /* Remove left margin when stacked */
                 width: 100%; /* Full width button */
             }
-
-            /* Adjust team players grid for very small screens */
-            .team-players-grid {
-                grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); /* Even smaller player cards if needed */
-            }
-
-            .team-player-card {
-                min-width: 60px; /* Ensure a minimum width */
-            }
-
-            .team-player-card img {
-                width: 30px;
-                height: 30px;
-            }
-
-            .team-player-card span {
-                font-size: 0.7rem;
-            }
         }
 
+        @media (max-width: 480px) {
+            .tournament-header,
+            .nav-tabs,
+            .matches-content {
+                margin-left: 10px;
+                margin-right: 10px;
+                padding: 15px; /* Reduce padding for tighter layout */
+            }
+        }
+        
         /* Animations */
         @keyframes fadeIn {
             from {
@@ -491,53 +439,905 @@
     </div>
 
     <script>
-        // Helper function to generate 22 generic players for a team
-        function generateTeamPlayers(participantName) {
-            const players = [];
-            for (let i = 1; i <= 22; i++) {
-                players.push({
-                    name: `Player ${i}`,
-                    // Using placeholder.co for generic player images
-                    img: `https://placehold.co/50x50/cccccc/white?text=${participantName.charAt(0)}${i}`
-                });
-            }
-            return players;
-        }
-
-        // Sample data for auction participants, now including a 'team' array with 22 players
+        // Define the auction participants with their fixed, unique player rosters.
+        // You can easily modify the 'team' array for each participant to change their players.
         const auctionParticipants = [
-            { name: 'Ako', coins: '30M', team: generateTeamPlayers('Ako') },
-            { name: 'Andrewar85', coins: '30M', team: generateTeamPlayers('Andrewar85') },
-            { name: 'anzil', coins: '30M', team: generateTeamPlayers('anzil') },
-            { name: 'Ashh', coins: '30M', team: generateTeamPlayers('Ashh') },
-            { name: 'asish__009', coins: '30M', team: generateTeamPlayers('asish') },
-            { name: 'BEASTg9', coins: '30M', team: generateTeamPlayers('BEASTg9') },
-            { name: 'Chris', coins: '30M', team: generateTeamPlayers('Chris') },
-            { name: 'CyberknightZH', coins: '30M', team: generateTeamPlayers('CyberknightZH') },
-            { name: 'Diamo12', coins: '30M', team: generateTeamPlayers('Diamo12') },
-            { name: 'FK04', coins: '30M', team: generateTeamPlayers('FK04') },
-            { name: 'Gamingsolutions', coins: '30M', team: generateTeamPlayers('Gamingsolutions') },
-            { name: 'Hamada', coins: '30M', team: generateTeamPlayers('Hamada') },
-            { name: 'ide5219', coins: '30M', team: generateTeamPlayers('ide5219') },
-            { name: 'Jay', coins: '30M', team: generateTeamPlayers('Jay') },
-            { name: 'Kaiser', coins: '30M', team: generateTeamPlayers('Kaiser') },
-            { name: 'Lord Maguire', coins: '30M', team: generateTeamPlayers('Lord Maguire') },
-            { name: 'Methlouthi', coins: '30M', team: generateTeamPlayers('Methlouthi') },
-            { name: 'Monate', coins: '30M', team: generateTeamPlayers('Monate') },
-            { name: 'Phoenix', coins: '30M', team: generateTeamPlayers('Phoenix') },
-            { name: 'Quantum', coins: '30M', team: generateTeamPlayers('Quantum') },
-            { name: 'Razor', coins: '30M', team: generateTeamPlayers('Razor') },
-            { name: 'Shadow', coins: '30M', team: generateTeamPlayers('Shadow') },
-            { name: 'Thunder', coins: '30M', team: generateTeamPlayers('Thunder') },
-            { name: 'Viper', coins: '30M', team: generateTeamPlayers('Viper') },
-            { name: 'Wolf', coins: '30M', team: generateTeamPlayers('Wolf') },
-            { name: 'Xenon', coins: '30M', team: generateTeamPlayers('Xenon') },
-            { name: 'Yoda', coins: '30M', team: generateTeamPlayers('Yoda') },
-            { name: 'Zephyr', coins: '30M', team: generateTeamPlayers('Zephyr') },
-            { name: 'Alpha', coins: '30M', team: generateTeamPlayers('Alpha') },
-            { name: 'Beta', coins: '30M', team: generateTeamPlayers('Beta') },
-            { name: 'Gamma', coins: '30M', team: generateTeamPlayers('Gamma') },
-            { name: 'Delta', coins: '30M', team: generateTeamPlayers('Delta') }
+            {
+                name: 'Ako', coins: '30M',
+                team: [
+                    { name: "Kvaratskhelia", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Messi", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "De Bruyne", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Rodri", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Neuer", img: "https://placehold.co/40x40/cccccc/white?text=N" },
+                    { name: "Ruben Dias", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Osimhen", img: "https://placehold.co/40x40/cccccc/white?text=O" },
+                    { name: "Griezmann", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Foden", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "Musiala", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Gavi", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Militão", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Saka", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Alisson", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Oblak", img: "https://placehold.co/40x40/cccccc/white?text=O" },
+                    { name: "Marquinhos", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Davies", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Walker", img: "https://placehold.co/40x40/cccccc/white?text=W" },
+                    { name: "Casemiro", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Kimmich", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Bernardo Silva", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Gündogan", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "New Player 1", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Andrewar85', coins: '30M',
+                team: [
+                    { name: "Mbappé", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Haaland", img: "https://placehold.co/40x40/cccccc/white?text=H" },
+                    { name: "Ronaldo", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Vinicius Jr.", img: "https://placehold.co/40x40/cccccc/white?text=V" },
+                    { name: "Bellingham", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Salah", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Kane", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Van Dijk", img: "https://placehold.co/40x40/cccccc/white?text=V" },
+                    { name: "Lewandowski", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "Pedri", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Araujo", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Odegaard", img: "https://placehold.co/40x40/cccccc/white?text=O" },
+                    { name: "Rice", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Ederson", img: "https://placehold.co/40x40/cccccc/white?text=E" },
+                    { name: "Courtois", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Donnarumma", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Mendy", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Hernandez", img: "https://placehold.co/40x40/cccccc/white?text=H" },
+                    { name: "Cancelo", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Trent Alexander-Arnold", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Robertson", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Modric", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "New Player 2", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'anzil', coins: '30M',
+                team: [
+                    { name: "Kroos", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Bruno Fernandes", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Valverde", img: "https://placehold.co/40x40/cccccc/white?text=V" },
+                    { name: "De Jong", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Kante", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Verratti", img: "https://placehold.co/40x40/cccccc/white?text=V" },
+                    { name: "Son Heung-min", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Neymar", img: "https://placehold.co/40x40/cccccc/white?text=N" },
+                    { name: "Dybala", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Vlahovic", img: "https://placehold.co/40x40/cccccc/white?text=V" },
+                    { name: "Lukaku", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "Immobile", img: "https://placehold.co/40x40/cccccc/white?text=I" },
+                    { name: "Leao", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "Di Lorenzo", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Bastoni", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Barella", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Tonali", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Chiesa", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Sane", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Gnabry", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Coman", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Müller", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "New Player 3", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Ashh', coins: '30M',
+                team: [
+                    { name: "Wirtz", img: "https://placehold.co/40x40/cccccc/white?text=W" },
+                    { name: "Upamecano", img: "https://placehold.co/40x40/cccccc/white?text=U" },
+                    { name: "De Ligt", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Skriniar", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Dumfries", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Theo Hernandez", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Hakimi", img: "https://placehold.co/40x40/cccccc/white?text=H" },
+                    { name: "Enzo Fernandez", img: "https://placehold.co/40x40/cccccc/white?text=E" },
+                    { name: "Mac Allister", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Caicedo", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "L. Martinez", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "Gabriel Jesus", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Martinelli", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Nkunku", img: "https://placehold.co/40x40/cccccc/white?text=N" },
+                    { name: "André Silva", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Jonathan David", img: "https://placehold.co/40x40/cccccc/white?text=J" },
+                    { name: "Openda", img: "https://placehold.co/40x40/cccccc/white?text=O" },
+                    { name: "Boniface", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Eriksen", img: "https://placehold.co/40x40/cccccc/white?text=E" },
+                    { name: "Mount", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Fernandinho", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "Busquets", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "New Player 4", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'asish__009', coins: '30M',
+                team: [
+                    { name: "Alaba", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Rudiger", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Koulibaly", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Varane", img: "https://placehold.co/40x40/cccccc/white?text=V" },
+                    { name: "Maguire", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "De Gea", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Navas", img: "https://placehold.co/40x40/cccccc/white?text=N" },
+                    { name: "Szczesny", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Onana", img: "https://placehold.co/40x40/cccccc/white?text=O" },
+                    { name: "Di Maria", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Perisic", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Kostic", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Mahrez", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Grealish", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Sterling", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Rashford", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "S. Milinkovic-Savic", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Fabinho", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "Henderson", img: "https://placehold.co/40x40/cccccc/white?text=H" },
+                    { name: "Thiago", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Arthur", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Lo Celso", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "New Player 5", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'BEASTg9', coins: '30M',
+                team: [
+                    { name: "Jorginho", img: "https://placehold.co/40x40/cccccc/white?text=J" },
+                    { name: "Kovacic", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Brozovic", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Parades", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Bissouma", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Tielemans", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Ward-Prowse", img: "https://placehold.co/40x40/cccccc/white?text=W" },
+                    { name: "Isak", img: "https://placehold.co/40x40/cccccc/white?text=I" },
+                    { name: "Watkins", img: "https://placehold.co/40x40/cccccc/white?text=W" },
+                    { name: "Darwin Nunez", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Richarlison", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Firmino", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "Jota", img: "https://placehold.co/40x40/cccccc/white?text=J" },
+                    { name: "Vardy", img: "https://placehold.co/40x40/cccccc/white?text=V" },
+                    { name: "Wilson", img: "https://placehold.co/40x40/cccccc/white?text=W" },
+                    { name: "Toney", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Mitrovic", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Callum Hudson-Odoi", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Sancho", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Felix", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "João Cancelo", img: "https://placehold.co/40x40/cccccc/white?text=J" },
+                    { name: "Pau Torres", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "New Player 6", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Chris', coins: '30M',
+                team: [
+                    { name: "Kounde", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Gvardiol", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Bennacer", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Spinazzola", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Wan-Bissaka", img: "https://placehold.co/40x40/cccccc/white?text=W" },
+                    { name: "Zaha", img: "https://placehold.co/40x40/cccccc/white?text=Z" },
+                    { name: "Saint-Maximin", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Mudryk", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Antony", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Goncalo Ramos", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Julian Alvarez", img: "https://placehold.co/40x40/cccccc/white?text=J" },
+                    { name: "Gakpo", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Xavi Simons", img: "https://placehold.co/40x40/cccccc/white?text=X" },
+                    { name: "Florian Neuhaus", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "Kerem Aktürkoglu", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Viktor Gyökeres", img: "https://placehold.co/40x40/cccccc/white?text=V" },
+                    { name: "Evan Ferguson", img: "https://placehold.co/40x40/cccccc/white?text=E" },
+                    { name: "Rasmus Højlund", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Elye Wahi", img: "https://placehold.co/40x40/cccccc/white?text=E" },
+                    { name: "Artem Dovbyk", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Victor Boniface", img: "https://placehold.co/40x40/cccccc/white?text=V" },
+                    { name: "Aarons", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "New Player 7", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'CyberknightZH', coins: '30M',
+                team: [
+                    { name: "Abrahams", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Adams", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Adamu", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Adarabioyo", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Adekanye", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Adli", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Ajer", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Akpom", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Albrighton", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Alderweireld", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Almiron", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Alonso", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Alves", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Amartey", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Ampadu", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Andersen", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Anderson", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Angelino", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Antonio", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Araújo", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Arias", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Armstrong", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "New Player 8", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Diamo12', coins: '30M',
+                team: [
+                    { name: "Arnautović", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Arthur Melo", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Aurier", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Azpilicueta", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Baba Rahman", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Bailly", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Bakayoko", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Baldock", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Bamford", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Barkley", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Barnes", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Batshuayi", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Bellerin", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Benrahma", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Bentancur", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Bergwijn", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Bertrand", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Bielik", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Billing", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Bissouma", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Bjornson", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Blind", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "New Player 9", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'FK04', coins: '30M',
+                team: [
+                    { name: "Boateng", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Boly", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Bonucci", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Borja Mayoral", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Bowen", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Boyata", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Braithwaite", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Brandt", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Brooks", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Brown", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Buendia", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Burke", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Burn", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Byram", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Cahill", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Calvert-Lewin", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Can", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Capoue", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Carvajal", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Castagne", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Ceballos", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Chalobah", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "New Player 10", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Gamingsolutions', coins: '30M',
+                team: [
+                    { name: "Chamberlain", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Chilwell", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Christensen", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Coady", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Coutinho", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Cucurella", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Dahoud", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Danjuma", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Darder", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Darmian", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "De Ligt", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Dembele", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Dendoncker", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Depay", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Dest", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Diallo", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Digne", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Doherty", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Dolberg", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Doucoure", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Draxler", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Dúbravka", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "New Player 11", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Hamada', coins: '30M',
+                team: [
+                    { name: "Duffy", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Edouard", img: "https://placehold.co/40x40/cccccc/white?text=E" },
+                    { name: "El Ghazi", img: "https://placehold.co/40x40/cccccc/white?text=E" },
+                    { name: "Elmas", img: "https://placehold.co/40x40/cccccc/white?text=E" },
+                    { name: "Emerson", img: "https://placehold.co/40x40/cccccc/white?text=E" },
+                    { name: "En-Nesyri", img: "https://placehold.co/40x40/cccccc/white?text=E" },
+                    { name: "Endo", img: "https://placehold.co/40x40/cccccc/white?text=E" },
+                    { name: "Eze", img: "https://placehold.co/40x40/cccccc/white?text=E" },
+                    { name: "Fabianski", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "Fati", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "Fekir", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "Ferdinand", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "Ferreira", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "Fofana", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "Forsberg", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "Fraser", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "Fred", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "Freuler", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "Gabriel", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Gallagher", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Gaya", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Gazzaniga", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "New Player 12", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'ide5219', coins: '30M',
+                team: [
+                    { name: "Gedson", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Geoffrey Kondogbia", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Gimenez", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Ginter", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Giroud", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Godin", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Gomez", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Guendouzi", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Gueye", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Gulacsi", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Havertz", img: "https://placehold.co/40x40/cccccc/white?text=H" },
+                    { name: "Hojbjerg", img: "https://placehold.co/40x40/cccccc/white?text=H" },
+                    { name: "Holgate", img: "https://placehold.co/40x40/cccccc/white?text=H" },
+                    { name: "Hudson-Odoi", img: "https://placehold.co/40x40/cccccc/white?text=H" },
+                    { name: "Icardi", img: "https://placehold.co/40x40/cccccc/white?text=I" },
+                    { name: "Iheanacho", img: "https://placehold.co/40x40/cccccc/white?text=I" },
+                    { name: "Ings", img: "https://placehold.co/40x40/cccccc/white?text=I" },
+                    { name: "Insigne", img: "https://placehold.co/40x40/cccccc/white?text=I" },
+                    { name: "Isco", img: "https://placehold.co/40x40/cccccc/white?text=I" },
+                    { name: "Iwobi", img: "https://placehold.co/40x40/cccccc/white?text=I" },
+                    { name: "James", img: "https://placehold.co/40x40/cccccc/white?text=J" },
+                    { name: "Jansson", img: "https://placehold.co/40x40/cccccc/white?text=J" },
+                    { name: "New Player 13", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Jay', coins: '30M',
+                team: [
+                    { name: "Juan Mata", img: "https://placehold.co/40x40/cccccc/white?text=J" },
+                    { name: "Kabak", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Kean", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Keita", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Kelly", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Kepa", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Kjaer", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Klaassen", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Klostermann", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Koopmeiners", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Kramaric", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Kubo", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Lacazette", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "Laporte", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "Lazzari", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "Lenglet", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "Leno", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "Lingard", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "Locatelli", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "Lodi", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "Loftus-Cheek", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "Long", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "New Player 14", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Kaiser', coins: '30M',
+                team: [
+                    { name: "Luiz", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "Maddison", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Malen", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Malinovskyi", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Mane", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Manolas", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Marcelo", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Martial", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Martinez", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Matip", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Maupay", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "McBurnie", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "McGinn", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "McTominay", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Meunier", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Militao", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Mina", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Mkhitaryan", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Moreno", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Moura", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Mukiele", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Muniain", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "New Player 15", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Lord Maguire', coins: '30M',
+                team: [
+                    { name: "Mustafi", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Ndombele", img: "https://placehold.co/40x40/cccccc/white?text=N" },
+                    { name: "Ndidi", img: "https://placehold.co/40x40/cccccc/white?text=N" },
+                    { name: "Neto", img: "https://placehold.co/40x40/cccccc/white?text=N" },
+                    { name: "Nkounkou", img: "https://placehold.co/40x40/cccccc/white?text=N" },
+                    { name: "Nketiah", img: "https://placehold.co/40x40/cccccc/white?text=N" },
+                    { name: "Nuno Mendes", img: "https://placehold.co/40x40/cccccc/white?text=N" },
+                    { name: "Olmo", img: "https://placehold.co/40x40/cccccc/white?text=O" },
+                    { name: "Origi", img: "https://placehold.co/40x40/cccccc/white?text=O" },
+                    { name: "Otamendi", img: "https://placehold.co/40x40/cccccc/white?text=O" },
+                    { name: "Pablo Fornals", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Palhinha", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Partey", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Pato", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Pepe", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Pereira", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Perisic", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Perrone", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Pique", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Pulisic", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Rabiot", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Ramsey", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "New Player 16", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Methlouthi', coins: '30M',
+                team: [
+                    { name: "Reguilon", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Reinier", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Renato Sanches", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Rodrygo", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Romero", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Rondon", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Rose", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Rui Patricio", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Sabitzer", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Saiss", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Saliba", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Sarr", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Schick", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Schmeichel", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Semedo", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Sergi Roberto", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Shaw", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Simeone", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Smalling", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Soler", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Soyuncu", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Stones", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "New Player 17", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Monate', coins: '30M',
+                team: [
+                    { name: "Suarez", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Tagliafico", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Tarkowski", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Telles", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Thomas Lemar", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Tomiyasu", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Torreira", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Traore", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Trippier", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Trossard", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Tuanzebe", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Umtiti", img: "https://placehold.co/40x40/cccccc/white?text=U" },
+                    { name: "Vazquez", img: "https://placehold.co/40x40/cccccc/white?text=V" },
+                    { name: "Vinicius", img: "https://placehold.co/40x40/cccccc/white?text=V" },
+                    { name: "Werner", img: "https://placehold.co/40x40/cccccc/white?text=W" },
+                    { name: "Wijnaldum", img: "https://placehold.co/40x40/cccccc/white?text=W" },
+                    { name: "Willian", img: "https://placehold.co/40x40/cccccc/white?text=W" },
+                    { name: "Xhaka", img: "https://placehold.co/40x40/cccccc/white?text=X" },
+                    { name: "Zaniolo", img: "https://placehold.co/40x40/cccccc/white?text=Z" },
+                    { name: "Ziyech", img: "https://placehold.co/40x40/cccccc/white?text=Z" },
+                    { name: "Zouma", img: "https://placehold.co/40x40/cccccc/white?text=Z" },
+                    { name: "Adebayo", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "New Player 18", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Phoenix', coins: '30M',
+                team: [
+                    { name: "Akinfenwa", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Arteta", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Bale", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Beckham", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Bergkamp", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Best", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Cantona", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Cruyff", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Dalglish", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Drogba", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Eusebio", img: "https://placehold.co/40x40/cccccc/white?text=E" },
+                    { name: "Gerrard", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Henry", img: "https://placehold.co/40x40/cccccc/white?text=H" },
+                    { name: "Lampard", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "Maradona", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Maldini", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Pele", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Platini", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Puskas", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Ronaldinho", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Scholes", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Shearer", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "New Player 19", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Quantum', coins: '30M',
+                team: [
+                    { name: "Stoichkov", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Thierry", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Totti", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Van Basten", img: "https://placehold.co/40x40/cccccc/white?text=V" },
+                    { name: "Zidane", img: "https://placehold.co/40x40/cccccc/white?text=Z" },
+                    { name: "Zola", img: "https://placehold.co/40x40/cccccc/white?text=Z" },
+                    { name: "Abedi Pele", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Baggio", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Baresi", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Beckenbauer", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Charlton", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Di Stefano", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Figo", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "Garrincha", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "George Best", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Gullit", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Kahn", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Kempes", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Kopa", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Laudrup", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "Matthäus", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Moore", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "New Player 20", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Razor', coins: '30M',
+                team: [
+                    { name: "Nesta", img: "https://placehold.co/40x40/cccccc/white?text=N" },
+                    { name: "Owen", img: "https://placehold.co/40x40/cccccc/white?text=O" },
+                    { name: "Rivaldo", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Roberto Carlos", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Romario", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Rummenigge", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Sócrates", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Suker", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Valderrama", img: "https://placehold.co/40x40/cccccc/white?text=V" },
+                    { name: "Weah", img: "https://placehold.co/40x40/cccccc/white?text=W" },
+                    { name: "Zico", img: "https://placehold.co/40x40/cccccc/white?text=Z" },
+                    { name: "Aguero", img: "https://placehold.co/40x40/cccccc/white?text=A" },
+                    { name: "Buffon", img: "https://placehold.co/40x40/cccccc/white?text=B" },
+                    { name: "Cech", img: "https://placehold.co/40x40/cccccc/white?text=C" },
+                    { name: "Del Piero", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Dida", img: "https://placehold.co/40x40/cccccc/white?text=D" },
+                    { name: "Eto'o", img: "https://placehold.co/40x40/cccccc/white?text=E" },
+                    { name: "Forlan", img: "https://placehold.co/40x40/cccccc/white?text=F" },
+                    { name: "Gattuso", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Giggs", img: "https://placehold.co/40x40/cccccc/white?text=G" },
+                    { name: "Inzaghi", img: "https://placehold.co/40x40/cccccc/white?text=I" },
+                    { name: "Kaka", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "New Player 21", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Shadow', coins: '30M',
+                team: [
+                    { name: "Klose", img: "https://placehold.co/40x40/cccccc/white?text=K" },
+                    { name: "Lahm", img: "https://placehold.co/40x40/cccccc/white?text=L" },
+                    { name: "Makaay", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Maresca", img: "https://placehold.co/40x40/cccccc/white?text=M" },
+                    { name: "Nedved", img: "https://placehold.co/40x40/cccccc/white?text=N" },
+                    { name: "Pirlo", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Puyol", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Raul", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Riquelme", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Robben", img: "https://placehold.co/40x40/cccccc/white?text=R" },
+                    { name: "Seedorf", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Silva", img: "https://placehold.co/40x40/cccccc/white?text=S" },
+                    { name: "Terry", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Trezeguet", img: "https://placehold.co/40x40/cccccc/white?text=T" },
+                    { name: "Van Nistelrooy", img: "https://placehold.co/40x40/cccccc/white?text=V" },
+                    { name: "Viera", img: "https://placehold.co/40x40/cccccc/white?text=V" },
+                    { name: "Xavi", img: "https://placehold.co/40x40/cccccc/white?text=X" },
+                    { name: "Zambrotta", img: "https://placehold.co/40x40/cccccc/white?text=Z" },
+                    { name: "Player A1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player A2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player A3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player A4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "New Player 22", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Thunder', coins: '30M',
+                team: [
+                    { name: "Player A5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player A6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player A7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player A8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player A9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player A10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player B1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player B2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player B3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player B4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player B5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player B6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player B7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player B8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player B9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player B10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player C1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player C2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player C3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player C4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player C5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player C6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "New Player 23", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Viper', coins: '30M',
+                team: [
+                    { name: "Player C7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player C8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player C9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player C10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player D1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player D2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player D3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player D4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player D5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player D6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player D7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player D8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player D9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player D10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player E1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player E2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player E3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player E4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player E5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player E6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player E7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player E8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "New Player 24", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Wolf', coins: '30M',
+                team: [
+                    { name: "Player E9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player E10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player F1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player F2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player F3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player F4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player F5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player F6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player F7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player F8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player F9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player F10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player G1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player G2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player G3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player G4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player G5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player G6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player G7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player G8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player G9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player G10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "New Player 25", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Xenon', coins: '30M',
+                team: [
+                    { name: "Player H1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player H2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player H3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player H4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player H5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player H6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player H7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player H8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player H9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player H10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player I1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player I2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player I3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player I4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player I5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player I6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player I7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player I8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player I9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player I10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player J1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player J2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "New Player 26", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Yoda', coins: '30M',
+                team: [
+                    { name: "Player J3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player J4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player J5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player J6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player J7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player J8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player J9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player J10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player K1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player K2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player K3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player K4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player K5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player K6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player K7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player K8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player K9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player K10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player L1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player L2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player L3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player L4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "New Player 27", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Zephyr', coins: '30M',
+                team: [
+                    { name: "Player L5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player L6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player L7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player L8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player L9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player L10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player M1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player M2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player M3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player M4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player M5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player M6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player M7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player M8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player M9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player M10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player N1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player N2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player N3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player N4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player N5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player N6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "New Player 28", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Alpha', coins: '30M',
+                team: [
+                    { name: "Player N7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player N8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player N9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player N10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player O1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player O2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player O3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player O4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player O5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player O6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player O7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player O8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player O9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player O10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player P1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player P2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player P3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player P4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player P5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player P6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player P7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player P8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "New Player 29", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Beta', coins: '30M',
+                team: [
+                    { name: "Player P9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player P10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player Q1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player Q2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player Q3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player Q4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player Q5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player Q6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player Q7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player Q8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player Q9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player Q10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player R1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player R2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player R3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player R4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player R5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player R6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player R7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player R8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player R9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player R10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "New Player 30", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Gamma', coins: '30M',
+                team: [
+                    { name: "Player S1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player S2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player S3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player S4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player S5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player S6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player S7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player S8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player S9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player S10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player T1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player T2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player T3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player T4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player T5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player T6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player T7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player T8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player T9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player T10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player U1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player U2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "New Player 31", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            },
+            {
+                name: 'Delta', coins: '30M',
+                team: [
+                    { name: "Player U3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player U4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player U5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player U6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player U7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player U8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player U9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player U10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player V1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player V2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player V3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player V4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player V5", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player V6", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player V7", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player V8", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player V9", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player V10", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player W1", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player W2", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player W3", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "Player W4", img: "https://placehold.co/40x40/cccccc/white?text=P" },
+                    { name: "New Player 32", img: "https://placehold.co/40x40/cccccc/white?text=N" } // Added player
+                ]
+            }
         ];
 
         // Function to create an auction participant box
@@ -568,7 +1368,7 @@
                     const playerCard = document.createElement('div');
                     playerCard.className = 'team-player-card';
                     playerCard.innerHTML = `
-                        <img src="${player.img}" alt="${player.name}" onerror="this.onerror=null;this.src='https://placehold.co/40x40/cccccc/white?text=NA';">
+                        <img src="${player.img}" alt="${player.name}" onerror="this.onerror=null;this.src='https://placehold.co/40x40/4e5e77/white?text=NA';">
                         <span>${player.name}</span>
                     `;
                     teamPlayersGrid.appendChild(playerCard);
@@ -577,8 +1377,7 @@
                 teamPlayersGrid.innerHTML = '<p style="color: #8e9aaf; text-align: center; width: 100%;">No team players available for this participant.</p>';
             }
 
-            // Add event listener to the "View Team" button using event delegation principle
-            // (listener is added to the grid parent, but effectively handles individual button clicks)
+            // Add event listener to the "View Team" button
             const viewMoreButton = box.querySelector('.view-more-button');
             viewMoreButton.addEventListener('click', (event) => {
                 event.stopPropagation(); // Prevent any parent click listeners
@@ -611,23 +1410,14 @@
         // Navigation functionality (reused from participants.html)
         document.addEventListener('DOMContentLoaded', function() {
             const tabs = document.querySelectorAll('.nav-tab');
-            
-            // Set active tab based on current URL
-            const currentPath = window.location.pathname.split('/').pop();
-            tabs.forEach(tab => {
-                if (tab.getAttribute('href') === currentPath) {
-                    tab.classList.add('active');
-                } else {
-                    tab.classList.remove('active');
-                }
-            });
 
             tabs.forEach(tab => {
                 tab.addEventListener('click', function() {
-                    // This part is for visual feedback, actual page navigation happens via href
                     tabs.forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
-                    console.log(`Switching to ${this.textContent} tab`);
+
+                    const tabName = this.textContent;
+                    console.log(`Switching to ${tabName} tab`);
                 });
             });
 
