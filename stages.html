@@ -75,6 +75,7 @@
             margin-left: 20px;
             margin-right: 20px;
             animation: fadeIn 0.8s ease-out; /* Fade-in animation */
+            background: url(./assets/bg.jpg);
         }
 
         .tournament-info {
@@ -285,6 +286,9 @@
 
         /* Responsive design */
         @media (max-width: 768px) {
+            .tournament-header{
+                background: url(./assets/bg-small.jpg);
+            }
             .bracket {
                 gap: 40px; /* Reduced gap between rounds */
                 min-width: 800px; /* Adjust min-width for smaller screens */
@@ -319,7 +323,9 @@
                 margin-right: 10px;
                 padding: 15px; /* Reduce padding for tighter layout */
             }
-
+            .tournament-header{
+                background: url(./assets/bg-small.jpg);
+            }
             .tournament-icon {
                 width: 60px;
                 height: 60px;
