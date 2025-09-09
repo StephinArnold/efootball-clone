@@ -460,26 +460,20 @@
                         🏆
                     </div>
                     <div class="tournament-details">
-                        <h1>eFootball Cup</h1>
+                        <h1>SFI eFootball Cup</h1>
                         <div class="tournament-meta">
-                            <span>Jul 31, 2025 - Aug 5, 2025</span>
+                            <span>Sep 11 - Sep 16, 2025</span>
                         </div>
                     </div>
                 </div>
-                <div class="tournament-actions">
-                    <!-- This section can be used for registration status or other actions -->
-                    <div class="registration-status">Registration open</div>
                 </div>
-            </div>
         </div>
 
         <nav class="nav-tabs">
             <a href="stages.html" class="nav-tab">Stages</a>
-            <a href="matches.html" class="nav-tab">Matches</a>
             <a href="participants.html" class="nav-tab active" aria-current="page">Participants</a>
             <a href="index.html" class="nav-tab">Rules</a>
-            <a href="auction.html" class="nav-tab">Auction</a>
-        </nav>
+            </nav>
 
         <div class="participants-content">
             <div class="participants-header">
@@ -489,12 +483,10 @@
 
             <div class="participants-controls">
                 <input type="text" class="search-box" placeholder="Search participants..." id="searchInput">
-                <!-- Removed filter button as 'online' property was removed from data -->
-            </div>
+                </div>
 
             <div class="participants-grid" id="participantsGrid">
-                <!-- Participant cards will be rendered here by JavaScript -->
-            </div>
+                </div>
         </div>
     </div>
 
@@ -508,7 +500,39 @@
             { name: 'asish__009', id: 'asish009_gamer', highlighted: false },
             { name: 'BEASTg9', id: 'beastg9_pro', highlighted: false },
             { name: 'Chris', id: 'chris_player', highlighted: false },
-            { name: 'CyberknightZH', id: 'cyberknight_zh', highlighted: true },
+            { name: 'CyberknightZH', id: 'cyberknight_zh', highlighted: false },
+            { name: 'Diamo12', id: 'diamo12_gamer', highlighted: false },
+            { name: 'FK04', id: 'fk04_player', highlighted: false },
+            { name: 'Gamingsolutions', id: 'gaming_solutions', highlighted: false },
+            { name: 'Hamada', id: 'hamada_pro', highlighted: false },
+            { name: 'ide5219', id: 'ide5219_player', highlighted: false },
+            { name: 'Jay', id: 'jay_gamer', highlighted: false },
+            { name: 'Kaiser', id: 'kaiser_pro', highlighted: false },
+            { name: 'Lord Maguire', id: 'lord_maguire', highlighted: false },
+            { name: 'Methlouthi', id: 'methlouthi_player', highlighted: false },
+            { name: 'Monate', id: 'monate_gamer', highlighted: false },
+            { name: 'Phoenix', id: 'phoenix_player', highlighted: false },
+            { name: 'Quantum', id: 'quantum_gamer', highlighted: false },
+            { name: 'Razor', id: 'razor_pro', highlighted: false },
+            { name: 'Shadow', id: 'shadow_player', highlighted: false },
+            { name: 'Thunder', id: 'thunder_gamer', highlighted: false },
+            { name: 'Viper', id: 'viper_pro', highlighted: false },
+            { name: 'Wolf', id: 'wolf_player', highlighted: false },
+            { name: 'Xenon', id: 'xenon_gamer', highlighted: false },
+            { name: 'Yoda', id: 'yoda_pro', highlighted: false },
+            { name: 'Zephyr', id: 'zephyr_player', highlighted: false },
+            { name: 'Alpha', id: 'alpha_gamer', highlighted: false },
+            { name: 'Beta', id: 'beta_pro', highlighted: false },
+            { name: 'Gamma', id: 'gamma_player', highlighted: false },
+            { name: 'Delta', id: 'delta_gamer', highlighted: false },
+            { name: 'Ako', id: 'ako_player', highlighted: false },
+            { name: 'Andrewar85', id: 'andrewar85_gamer', highlighted: false },
+            { name: 'anzil', id: 'anzil_pro', highlighted: false },
+            { name: 'Ashh', id: 'ashh_player', highlighted: false },
+            { name: 'asish__009', id: 'asish009_gamer', highlighted: false },
+            { name: 'BEASTg9', id: 'beastg9_pro', highlighted: false },
+            { name: 'Chris', id: 'chris_player', highlighted: false },
+            { name: 'CyberknightZH', id: 'cyberknight_zh', highlighted: false },
             { name: 'Diamo12', id: 'diamo12_gamer', highlighted: false },
             { name: 'FK04', id: 'fk04_player', highlighted: false },
             { name: 'Gamingsolutions', id: 'gaming_solutions', highlighted: false },
@@ -620,6 +644,29 @@
                 e.preventDefault(); // Prevent browser's quick find
                 document.getElementById('searchInput').focus();
             }
+        });
+
+        // Add typing effect to tournament title
+        function typeWriter(element, text, speed = 50) {
+            let i = 0;
+            element.textContent = ''; // Clear initial text
+            
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            
+            type(); // Start typing
+        }
+
+        // Initialize typing effect on window load
+        window.addEventListener('load', function() {
+            const titleElement = document.querySelector('.tournament-details h1');
+            const originalText = titleElement.textContent; // Get the full text
+            typeWriter(titleElement, originalText, 80); // Apply typing effect
         });
     </script>
 </body>
