@@ -171,6 +171,63 @@
             background: rgba(59, 130, 246, 0.1);
         }
 
+        /* Prizes Section */
+        .prizes-container {
+            margin: 20px;
+            padding: 30px;
+            background: #16213e;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .prizes-container h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFB800 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .prizes-list {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .prize-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #2d3e5f;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .prize-item .emoji {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .prize-item .prize-amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #4ade80;
+            margin-bottom: 5px;
+        }
+
+        .prize-item .prize-title {
+            font-size: 1rem;
+            color: #8e9aaf;
+        }
+
         /* Bracket Specific Styles */
         .bracket-container {
             padding: 30px;
@@ -331,7 +388,8 @@
         @media (max-width: 480px) {
             .tournament-header,
             .nav-tabs,
-            .bracket-container {
+            .bracket-container,
+            .prizes-container {
                 margin-left: 10px;
                 margin-right: 10px;
                 padding: 15px;
@@ -353,6 +411,10 @@
             .nav-tab {
                 padding: 12px 10px;
                 font-size: 0.9rem;
+            }
+
+            .prizes-list {
+                flex-direction: column;
             }
         }
 
@@ -400,7 +462,7 @@
                     <div class="tournament-details">
                         <h1>SFI eFootball Cup</h1>
                         <div class="tournament-meta">
-                            <span>Sep 11 - Sep 14, 2025</span>
+                            <span>Sep 11 - Sep 16, 2025</span>
                         </div>
                     </div>
                 </div>
@@ -412,6 +474,27 @@
             <a href="participants.html" class="nav-tab">Participants</a>
             <a href="index.html" class="nav-tab">Rules</a>
         </nav>
+        
+        <div class="prizes-container">
+            <h2>Prizes</h2>
+            <div class="prizes-list">
+                <div class="prize-item">
+                    <span class="emoji">🥇</span>
+                    <div class="prize-amount">TBD</div>
+                    <div class="prize-title">Winner</div>
+                </div>
+                <div class="prize-item">
+                    <span class="emoji">🥈</span>
+                    <div class="prize-amount">TBD</div>
+                    <div class="prize-title">1st RunnerUp</div>
+                </div>
+                <div class="prize-item">
+                    <span class="emoji">🥉</span>
+                    <div class="prize-amount">TBD</div>
+                    <div class="prize-title">2nd RunnerUp</div>
+                </div>
+            </div>
+        </div>
 
         <div class="bracket-container">
             <div class="bracket" id="bracket">
